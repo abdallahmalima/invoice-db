@@ -17,11 +17,13 @@ import { LayoutContext } from "./context/layoutcontext";
 import { PrimeReactContext } from "primereact/api";
 import { ChildContainerProps, LayoutState, AppTopbarRef } from "../types/types";
 import { usePathname, useSearchParams } from "next/navigation";
+import { FIREBASE_AUTH } from '../firebase.config';
 
 
 const Layout = ({ children }: ChildContainerProps) => {
   const { layoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
   const { setRipple } = useContext(PrimeReactContext);
+  const router = useRouter();
   const topbarRef = useRef<AppTopbarRef>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [bindMenuOutsideClickListener, unbindMenuOutsideClickListener] =
@@ -47,6 +49,17 @@ const Layout = ({ children }: ChildContainerProps) => {
     hideMenu();
     hideProfileMenu();
   }, [pathname, searchParams]);
+
+  useEffect(() => {
+    const unsubscribe = FIREBASE_AUTH.onAuthStateChanged((user) => {
+        // Set loading to false once the authentication status is determined
+  
+        if (!user) {
+          router.push('/auth/login');
+        }
+      });
+    return unsubscribe()
+}, []);
 
   const [
     bindProfileMenuOutsideClickListener,
