@@ -24,6 +24,7 @@ import { uuid as uuidv4 } from 'uuidv4';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { Skeleton } from 'primereact/skeleton';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { useClients } from '../../../../demo/hook/DataFetcher';
 
 
 
@@ -41,7 +42,7 @@ const Product = () => {
         inventoryStatus: 'INSTOCK'
     };
     const [productImage, setProductImage] = useState<File | null>(null);
-    const [products, setProducts] = useState<Demo.Product[]>([]);
+    // const [products, setProducts] = useState<Demo.Product[]>([]);
     const [productDialog, setProductDialog] = useState(false);
     const [deleteProductDialog, setDeleteProductDialog] = useState(false);
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
@@ -55,8 +56,10 @@ const Product = () => {
 
     const [usageInputFields ,setUsageInputFields]=useState<any>([])
     const [diseaseInputFields ,setDiseaseInputFields]=useState<any>([])
-    const [isLoading,setIsLoading]=useState(false)
+    // const [isLoading,setIsLoading]=useState(false)
     const [isLoadingSubmit,setIsLoadingSubmit]=useState(false)
+
+    const [isLoading,products,setProducts]=useClients()
 
 
         const addUsageInputField = ()=>{
@@ -104,32 +107,32 @@ const Product = () => {
 }
 
 
-    useEffect(() => {
-        const unsubscribe=loadProducts()
+    // useEffect(() => {
+    //     const unsubscribe=loadProducts()
 
-          return ()=>{unsubscribe()}
-    }, []);
+    //       return ()=>{unsubscribe()}
+    // }, []);
 
-    const loadProducts=()=>{
-        setIsLoading(true)
-        const productRef=collection(FIRESTORE_DB,'products')
-        const subscriber=onSnapshot(productRef,{
-            next:(snapshot)=>{
-              const products:any=[];
-              snapshot.docs.forEach((doc)=>{
-                products.push({
-                  id:doc.id,
-                  ...doc.data()
-                })
+    // const loadProducts=()=>{
+    //     setIsLoading(true)
+    //     const productRef=collection(FIRESTORE_DB,'products')
+    //     const subscriber=onSnapshot(productRef,{
+    //         next:(snapshot)=>{
+    //           const products:any=[];
+    //           snapshot.docs.forEach((doc)=>{
+    //             products.push({
+    //               id:doc.id,
+    //               ...doc.data()
+    //             })
                 
-              })
-              setIsLoading(false)
-                setProducts(products)
-            }
-          })
+    //           })
+    //           setIsLoading(false)
+    //             setProducts(products)
+    //         }
+    //       })
 
-          return subscriber
-    }
+    //       return subscriber
+    // }
 
     const formatCurrency = (value: number) => {
         return value.toLocaleString('en-US', { style: 'currency', currency: 'TSH' });
@@ -435,7 +438,7 @@ const Product = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage Products</h5>
+            <h5 className="m-0">List of Clients</h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText type="search" onInput={(e) => setGlobalFilter(e.currentTarget.value)} placeholder="Search..." />
@@ -478,7 +481,7 @@ const Product = () => {
     const imageSkeletonBodyTemplate = (rowData: Demo.Product) => {
         return (
             <>
-                <span className="p-column-title">Image</span>
+                <span className="p-column-title">Name</span>
                 <Skeleton width="7rem" height="4rem"></Skeleton>
             </>
         );
@@ -486,7 +489,7 @@ const Product = () => {
     const titleSkeletonBodyTemplate = (rowData: Demo.Post) => {
         return (
             <>
-                 <span className="p-column-title">Name</span>
+                 <span className="p-column-title">Phone</span>
                  <div className="flex">
                 <div style={{ flex: '1' }}>
                     <Skeleton width="100%" className="mb-2"></Skeleton>
@@ -500,7 +503,7 @@ const Product = () => {
     const descriptionSkeletonBodyTemplate = (rowData: Demo.Post) => {
         return (
             <>
-                 <span className="p-column-title">Description</span>
+                 <span className="p-column-title">Service</span>
                  <div className="flex">
                 <div style={{ flex: '1' }}>
                     <Skeleton width="100%" className="mb-2"></Skeleton>
@@ -514,7 +517,7 @@ const Product = () => {
     const priceSkeletonBodyTemplate = (rowData: Demo.Post) => {
         return (
             <>
-                 <span className="p-column-title">Price</span>
+                 <span className="p-column-title">Street</span>
                  <div className="flex">
                 <div style={{ flex: '1' }}>
                     <Skeleton width="75%"></Skeleton>
@@ -548,10 +551,10 @@ const Product = () => {
                         value={[{},{},{},{},{},{},{},{},{}]}
                     >
                         <Column selectionMode="multiple" headerStyle={{ width: '4rem' }}></Column>
-                        <Column header="Image" body={imageSkeletonBodyTemplate}></Column>
-                        <Column field="title" header="title" sortable body={titleSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
-                        <Column field="description" header="description" sortable body={descriptionSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
-                        <Column field="price" header="price" sortable body={priceSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
+                        <Column header="Name" body={imageSkeletonBodyTemplate}></Column>
+                        <Column field="title" header="phone" sortable body={titleSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
+                        <Column field="description" header="service" sortable body={descriptionSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
+                        <Column field="price" header="street" sortable body={priceSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
                         <Column body={actionSkeletonBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
                     </DataTable>}
 

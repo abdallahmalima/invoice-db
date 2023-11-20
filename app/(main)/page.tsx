@@ -11,6 +11,7 @@ import { LayoutContext } from '../../layout/context/layoutcontext';
 import Link from 'next/link';
 import { Demo } from '../../types/types';
 import { ChartData, ChartOptions } from 'chart.js';
+import { useClients } from '../../demo/hook/DataFetcher';
 
 const lineData: ChartData = {
     labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
@@ -35,11 +36,13 @@ const lineData: ChartData = {
 };
 
 const Dashboard = () => {
-    const [products, setProducts] = useState<Demo.Product[]>([]);
+    // const [products, setProducts] = useState<Demo.Product[]>([]);
     const menu1 = useRef<Menu>(null);
     const menu2 = useRef<Menu>(null);
     const [lineOptions, setLineOptions] = useState<ChartOptions>({});
     const { layoutConfig } = useContext(LayoutContext);
+
+    const [isLoading,products,setProduct]=useClients()
 
     const applyLightTheme = () => {
         const lineOptions: ChartOptions = {
@@ -105,9 +108,9 @@ const Dashboard = () => {
         setLineOptions(lineOptions);
     };
 
-    useEffect(() => {
-        ProductService.getProductsSmall().then((data) => setProducts(data));
-    }, []);
+    // useEffect(() => {
+    //     ProductService.getProductsSmall().then((data) => setProducts(data));
+    // }, []);
 
     useEffect(() => {
         if (layoutConfig.colorScheme === 'light') {
@@ -138,7 +141,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                     <span className="text-green-500 font-medium">24 new </span>
-                    <span className="text-500">since last visit</span>
+                    <span className="text-500"> last week visit</span>
                 </div>
             </div>
             <div className="col-12 lg:col-6 xl:col-3">
@@ -146,14 +149,14 @@ const Dashboard = () => {
                     <div className="flex justify-content-between mb-3">
                         <div>
                             <span className="block text-500 font-medium mb-3">Kinondoni</span>
-                            <div className="text-900 font-medium text-xl">$2.100</div>
+                            <div className="text-900 font-medium text-xl">337</div>
                         </div>
-                        <div className="flex align-items-center justify-content-center bg-orange-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
-                            <i className="pi pi-map-marker text-orange-500 text-xl" />
+                        <div className="flex align-items-center justify-content-center bg-blue-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
+                            <i className="pi pi-shopping-cart text-blue-500 text-xl" />
                         </div>
                     </div>
-                    <span className="text-green-500 font-medium">%52+ </span>
-                    <span className="text-500">since last week</span>
+                    <span className="text-green-500 font-medium">47 new </span>
+                    <span className="text-500"> last week visit</span>
                 </div>
             </div>
             <div className="col-12 lg:col-6 xl:col-3">
@@ -161,14 +164,14 @@ const Dashboard = () => {
                     <div className="flex justify-content-between mb-3">
                         <div>
                             <span className="block text-500 font-medium mb-3">Mbezi</span>
-                            <div className="text-900 font-medium text-xl">28441</div>
+                            <div className="text-900 font-medium text-xl">550</div>
                         </div>
-                        <div className="flex align-items-center justify-content-center bg-cyan-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
-                            <i className="pi pi-inbox text-cyan-500 text-xl" />
+                        <div className="flex align-items-center justify-content-center bg-blue-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
+                            <i className="pi pi-shopping-cart text-blue-500 text-xl" />
                         </div>
                     </div>
-                    <span className="text-green-500 font-medium">520 </span>
-                    <span className="text-500">newly registered</span>
+                    <span className="text-green-500 font-medium">67 new </span>
+                    <span className="text-500"> last week visit</span>
                 </div>
             </div>
             <div className="col-12 lg:col-6 xl:col-3">
@@ -176,33 +179,29 @@ const Dashboard = () => {
                     <div className="flex justify-content-between mb-3">
                         <div>
                             <span className="block text-500 font-medium mb-3">Sinza</span>
-                            <div className="text-900 font-medium text-xl">152 Unread</div>
+                            <div className="text-900 font-medium text-xl">679</div>
                         </div>
-                        <div className="flex align-items-center justify-content-center bg-purple-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
-                            <i className="pi pi-comment text-purple-500 text-xl" />
+                        <div className="flex align-items-center justify-content-center bg-blue-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
+                            <i className="pi pi-shopping-cart text-blue-500 text-xl" />
                         </div>
                     </div>
-                    <span className="text-green-500 font-medium">85 </span>
-                    <span className="text-500">responded</span>
+                    <span className="text-green-500 font-medium">112 new </span>
+                    <span className="text-500"> last week visit</span>
                 </div>
             </div>
-
+           
+           
             <div className="col-12 xl:col-6">
                 <div className="card">
-                    <h5>Top Customers</h5>
+                    <h5>Top 10 Customers of the week</h5>
                     <DataTable value={products} rows={5} paginator responsiveLayout="scroll">
-                        <Column header="Image" body={(data) => <img className="shadow-2" src={`/demo/images/product/${data.image}`} alt={data.image} width="50" />} />
-                        <Column field="name" header="Name" sortable style={{ width: '35%' }} />
-                        <Column field="price" header="Price" sortable style={{ width: '35%' }} body={(data) => formatCurrency(data.price)} />
-                        <Column
-                            header="View"
-                            style={{ width: '15%' }}
-                            body={() => (
-                                <>
-                                    <Button icon="pi pi-search" text />
-                                </>
-                            )}
-                        />
+                  
+                        <Column field="f_name" header="Name" sortable style={{ width: '35%' }} />
+                        <Column field="phone" header="Phone" sortable style={{ width: '35%' }} />
+                        <Column field="service" header="Service" sortable style={{ width: '35%' }} />
+                        <Column field="street" header="Street" sortable style={{ width: '35%' }} />
+                        
+                       
                     </DataTable>
                 </div>
               
