@@ -25,12 +25,12 @@ const AppMenu = () => {
                
                 {
                     label: 'Customers',
-                    icon: 'pi pi-fw pi-pencil',
+                    icon: 'pi pi-fw pi-table',
                     to: '/pages/products'
                 },
                 {
                     label: 'Comments',
-                    icon: 'pi pi-fw pi-pencil',
+                    icon: 'pi pi-fw pi-comment',
                     to: '/pages/comments'
                 },
                 
