@@ -8,6 +8,8 @@ import { LayoutContext } from './context/layoutcontext';
 import { signOut } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../firebase.config';
 import { useRouter } from 'next/navigation';
+import { Button } from 'primereact/button';
+import { Badge } from 'primereact/badge';
 
 
 const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
@@ -39,6 +41,9 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
             </button>
 
             <div ref={topbarmenuRef} className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}>
+                  <Button type="button" label="Comments" icon="pi pi-users" severity="warning">
+                            <Badge value="8" severity="danger"></Badge>
+                        </Button>
                 <button type="button" className="p-link layout-topbar-button">
                     <i className="pi pi-calendar"></i>
                     <span>Calendar</span>
