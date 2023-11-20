@@ -11,37 +11,65 @@ import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { NodeRef } from '../../../types/types';
 import { classNames } from 'primereact/utils';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { FIREBASE_AUTH } from '../../../firebase.config';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Checkbox } from 'primereact/checkbox';
 import { useRouter } from 'next/navigation';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { Toast } from 'primereact/toast';
+import { addDoc, collection, doc, updateDoc,onSnapshot, deleteDoc, where, query } from "firebase/firestore";
+import {FIRESTORE_DB,FIREBASE_AUTH}  from "../../../firebase.config";
 
 const LandingPage = () => {
     const [isHidden, setIsHidden] = useState(false);
     const { layoutConfig } = useContext(LayoutContext);
     const menuRef = useRef<HTMLElement | null>(null);
+    const toast = useRef<Toast>(null);
 
     const toggleMenuItemClick = () => {
         setIsHidden((prevState) => !prevState);
     };
 
 
-    const [password, setPassword] = useState('');
+    const [comment, setComment] = useState({
+        name:'',
+        phone:'',
+        email:'',
+        message:'',
+    });
     const [checked, setChecked] = useState(false);
     const [email, setEmail] = useState('');
 
     const router = useRouter();
     const containerClassName = classNames('surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
 
-    const handleLogin=()=>{
-        const res=signInWithEmailAndPassword(FIREBASE_AUTH,email,password).then(()=>{
-          router.push('/')
-        })
-        
+    const handleLogin=async ()=>{
+       console.log(comment)
+       const doc=await addDoc(collection(FIRESTORE_DB,'comments'),{
+        name:comment.name,
+        phone:comment.phone,
+        email:comment.email,
+        message:comment.message,
+     })
+
+     setComment({
+        name:'',
+        phone:'',
+        email:'',
+        message:'',
+    });
+     
+     toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Maoni Yako Yametumwa, Ahsante!', life: 3000 });
         
        }
+
+       const onInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, name: string) => {
+        const val = (e.target && e.target.value) || '';
+        let _product:any = { ...comment };
+        _product[`${name}`] = val;
+
+        setComment(_product);
+    };
 
 
 
@@ -66,10 +94,10 @@ const LandingPage = () => {
                       
                     </div>
                     <div className="flex justify-content-center pt-6">
-                          
+                   
                   
                         <div className="flex  align-items-center justify-content-center">
-                        
+                       
                             <div
                                 style={{
                                     borderRadius: '56px',
@@ -77,6 +105,7 @@ const LandingPage = () => {
                                     background: 'linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)'
                                 }}
                             >
+                                 <Toast ref={toast} />
                                 <div className="w-full surface-card py-8 px-5 sm:px-8" style={{ borderRadius: '53px' }}>
                                     <div className="text-center mb-5">
                                         <div className="text-900 text-3xl font-medium mb-3">Andika Maoni Yako Hapa</div>
@@ -87,20 +116,20 @@ const LandingPage = () => {
                                         <label htmlFor="name" className="block text-900 text-xl font-medium mb-2">
                                             Jina Kamili
                                         </label>
-                                        <InputText id="name" value={''} onChange={(e) => setEmail(e.target.value)}  type="text" placeholder="Andika Jina" className="w-full md:w-30rem mb-5" style={{ padding: '1rem' }} />
+                                        <InputText id="name" value={comment.name} onChange={(e) => onInputChange(e, 'name')}  type="text" placeholder="Andika Jina" className="w-full md:w-30rem mb-5" style={{ padding: '1rem' }} />
                                         <label htmlFor="phone" className="block text-900 text-xl font-medium mb-2">
                                             Namba Ya Simu
                                         </label>
-                                        <InputText id="phone" value={''} onChange={(e) => setEmail(e.target.value)}  type="text" placeholder="Andika Namba Ya Simu" className="w-full md:w-30rem mb-5" style={{ padding: '1rem' }} />
+                                        <InputText id="phone" value={comment.phone} onChange={(e) => onInputChange(e, 'phone')}  type="text" placeholder="Andika Namba Ya Simu" className="w-full md:w-30rem mb-5" style={{ padding: '1rem' }} />
                                         <label htmlFor="email" className="block text-900 text-xl font-medium mb-2">
                                             Email(Sio lazima)
                                         </label>
-                                        <InputText id="email" value={''} onChange={(e) => setEmail(e.target.value)}  type="text" placeholder="Andika Email" className="w-full md:w-30rem mb-5" style={{ padding: '1rem' }} />
+                                        <InputText id="email" value={comment.email} onChange={(e) => onInputChange(e, 'email')}  type="text" placeholder="Andika Email" className="w-full md:w-30rem mb-5" style={{ padding: '1rem' }} />
                                          
                                         <label htmlFor="email" className="block text-900 text-xl font-medium mb-2">
                                             Maoni
                                         </label>
-                                        <InputTextarea placeholder="Andika Maoni" rows={5} cols={30} className="w-full md:w-30rem mb-5" style={{ padding: '1rem' }} />
+                                        <InputTextarea value={comment.message} onChange={(e) => onInputChange(e, 'message')} placeholder="Andika Maoni"  rows={5} cols={30} className="w-full md:w-30rem mb-5" style={{ padding: '1rem' }} />
 
                                       
                                         <Button label="Tuma Maoni" className="w-3 p-3 text-xl" onClick={handleLogin}></Button>
