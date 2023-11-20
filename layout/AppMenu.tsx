@@ -28,6 +28,11 @@ const AppMenu = () => {
                     icon: 'pi pi-fw pi-pencil',
                     to: '/pages/products'
                 },
+                {
+                    label: 'Comments',
+                    icon: 'pi pi-fw pi-pencil',
+                    to: '/pages/comments'
+                },
                 
             ]
         },
