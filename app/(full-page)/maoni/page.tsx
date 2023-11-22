@@ -19,6 +19,7 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
 import { addDoc, collection, doc, updateDoc,onSnapshot, deleteDoc, where, query } from "firebase/firestore";
 import {FIRESTORE_DB,FIREBASE_AUTH}  from "../../../firebase.config";
+import { sendClientSms } from '../../../actions/server';
 
 const LandingPage = () => {
     const [isHidden, setIsHidden] = useState(false);
@@ -51,6 +52,10 @@ const LandingPage = () => {
         email:comment.email,
         message:comment.message,
      })
+     const formData=new FormData()
+     formData.append("phone",comment.phone)
+     formData.append("name",comment.name)
+      sendClientSms(formData)
 
      setComment({
         name:'',
