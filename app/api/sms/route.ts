@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       return Buffer.from(credentials).toString("base64");
     };
     
-     const sendSms = async () => {
+    
       try {
         const response = await fetch("https://apisms.beem.africa/v1/send", {
           method: "POST",
@@ -50,9 +50,7 @@ export async function POST(request: Request) {
         //console.error(error);
         return new Response('Error')
       }
-    };
-    
-    sendSms()
+  
 
     return new Response('Hello, Next.js!')
 
