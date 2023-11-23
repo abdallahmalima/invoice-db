@@ -3,8 +3,8 @@ export async function GET(request: Request) {
     // smsService.js
 
 
-    const api_key = "11fec7e975d60b7f";
-    const secret_key = "NDhmZTg0OWQ1ZGZlYzA0NTAxMmI4MDYxM2FmNDMwNzljYzc1ZmFlYTEyMDMxYWQ3NTY1ZjQwZDBkNDY1Yzc5Yg==";
+    const api_key = process.env.NEXT_SMS_API_KEY;
+    const secret_key = process.env.NEXT_SMS_API_SECRET;
     const content_type = "application/json";
     const source_addr = "INFO";
     
