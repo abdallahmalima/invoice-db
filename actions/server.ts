@@ -1,6 +1,6 @@
 "use server"
 
-export const sendClientSms=(formData:any)=>{
+export const sendClientSms= async (formData:any)=>{
     const phone = formData.get('phone');
     const clientName =formData.get('name');
 
@@ -17,7 +17,7 @@ export const sendClientSms=(formData:any)=>{
       return Buffer.from(credentials).toString("base64");
     };
     
-     const sendSms = async () => {
+     
       try {
         const response = await fetch("https://apisms.beem.africa/v1/send", {
           method: "POST",
@@ -50,9 +50,7 @@ export const sendClientSms=(formData:any)=>{
       } catch (error) {
         console.error(error);
       }
-    };
-    
-    sendSms()
+  
    
     
 }

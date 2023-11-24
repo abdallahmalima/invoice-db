@@ -47,8 +47,8 @@ export async function POST(request: Request) {
     
         console.log(data, api_key + ":" + secret_key);
       } catch (error) {
-        //console.error(error);
-        return new Response('Error')
+        console.error(error);
+       
       }
   
 
