@@ -20,12 +20,14 @@ import { Toast } from 'primereact/toast';
 import { addDoc, collection, doc, updateDoc,onSnapshot, deleteDoc, where, query } from "firebase/firestore";
 import {FIRESTORE_DB,FIREBASE_AUTH}  from "../../../firebase.config";
 import { sendClientSms } from '../../../actions/server';
+import useHostName from '../../../demo/hook/hostname';
 
 const LandingPage = () => {
     const [isHidden, setIsHidden] = useState(false);
     const { layoutConfig } = useContext(LayoutContext);
     const menuRef = useRef<HTMLElement | null>(null);
     const toast = useRef<Toast>(null);
+    const { url } =useHostName();
 
     const toggleMenuItemClick = () => {
         setIsHidden((prevState) => !prevState);
@@ -38,6 +40,7 @@ const LandingPage = () => {
         email:'',
         message:'',
     });
+    
     const [checked, setChecked] = useState(false);
     const [email, setEmail] = useState('');
 
@@ -55,28 +58,28 @@ const LandingPage = () => {
      
      // sendClientSms(formData)
 
-     let url = 'http://localhost:3000/api/sms';
+     let urlSms = `${url}/api/sms`;
+     let urlEmail = `${url}/api/email`;
 
-     if (typeof window !== 'undefined') {
-        const hostname = window.location.hostname;
-        if(hostname==='samakisamaki.jasmai.design'){
-            url = 'https://samakisamaki.jasmai.design/api/sms'
-        }
-     }
-
+     
      // Create the data to be sent in the request body (in JSON format)
-     const data = {
-       phone: comment.phone // Replace with the actual phone number
-     };
-   
+     
     
-       const response = await fetch(url, {
+       const responsePhone = await fetch(urlSms, {
          method: 'POST',
          headers: {
            'Content-Type': 'application/json' 
          },
-         body: JSON.stringify(data) 
+         body: JSON.stringify({phone:comment.phone}) 
        });
+
+       const responseEmail = await fetch(urlEmail, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({email:comment.email}) 
+      });
 
      setComment({
         name:'',
