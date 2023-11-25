@@ -1,10 +1,10 @@
 export const maxDuration = 10; // This function can run for a maximum of 5 seconds
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: Request) {
-
+export async function POST(request: Request) {
+  const {phone} = await request.json();
     // smsService.js
-
+    
 
     const api_key = process.env.NEXT_SMS_API_KEY;
     const secret_key = process.env.NEXT_SMS_API_SECRET;
@@ -34,7 +34,7 @@ export async function GET(request: Request) {
             recipients: [
               {
                 recipient_id: 1,
-                dest_addr: "255677024584",
+                dest_addr: phone,
               },
             //   {
             //     recipient_id: 2,

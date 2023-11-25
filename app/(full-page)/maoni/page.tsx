@@ -52,10 +52,31 @@ const LandingPage = () => {
         email:comment.email,
         message:comment.message,
      })
-     const formData=new FormData()
-     formData.append("phone",comment.phone)
-     formData.append("name",comment.name)
-      sendClientSms(formData)
+     
+     // sendClientSms(formData)
+
+     let url = 'http://localhost:3000/api/sms';
+
+     if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        if(hostname==='samakisamaki.jasmai.design'){
+            url = 'https://samakisamaki.jasmai.design/api/sms'
+        }
+     }
+
+     // Create the data to be sent in the request body (in JSON format)
+     const data = {
+       phone: comment.phone // Replace with the actual phone number
+     };
+   
+    
+       const response = await fetch(url, {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json' 
+         },
+         body: JSON.stringify(data) 
+       });
 
      setComment({
         name:'',
