@@ -1,5 +1,5 @@
 "use server"
-export const maxDuration = 10;
+
 export const sendClientSms= async (formData:any)=>{
     const phone = formData.get('phone');
     const clientName =formData.get('name');
