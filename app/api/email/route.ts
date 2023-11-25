@@ -15,9 +15,9 @@ export async function POST(request: Request) {
   
       try {
         const data = await resend.emails.send({
-          from: 'WebXite <promo@jasmai.design>',
+          from: 'Jasmai Media Solutions <promo@jasmai.design>',
           to: [email],
-          subject: 'Hello '+ 'Malima',
+          subject: 'Ahsante Mteja!',
           react: EmailTemplate({ firstName: "Malima" }),
         });
     
