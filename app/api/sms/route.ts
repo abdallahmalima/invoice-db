@@ -1,4 +1,4 @@
-export const maxDuration = 55; // This function can run for a maximum of 5 seconds
+export const maxDuration = 10; // This function can run for a maximum of 5 seconds
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
