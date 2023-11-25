@@ -1,6 +1,10 @@
 import { EmailTemplate } from "../../../demo/components/email-template";
 import { Resend } from 'resend';
 
+export const maxDuration = 10; // This function can run for a maximum of 5 seconds
+export const dynamic = 'force-dynamic';
+
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 
