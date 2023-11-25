@@ -1,6 +1,7 @@
+export const maxDuration = 55; // This function can run for a maximum of 5 seconds
+export const dynamic = 'force-dynamic';
 
-
-export async function POST(request: Request) {
+export async function GET(request: Request) {
 
     // smsService.js
 

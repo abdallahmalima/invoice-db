@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth,connectAuthEmulator } from "firebase/auth";
+import { getFirestore ,connectFirestoreEmulator} from "firebase/firestore";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -14,6 +14,14 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const FIREBASE_APP = initializeApp(firebaseConfig);
-export const FIRESTORE_DB = getFirestore(FIREBASE_APP);
-export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
+ const FIREBASE_APP = initializeApp(firebaseConfig);
+ const FIRESTORE_DB = getFirestore(FIREBASE_APP);
+ const FIREBASE_AUTH = getAuth(FIREBASE_APP);
+
+// // if(location.hostname==='localhost'){
+//   connectAuthEmulator(FIREBASE_AUTH,'http://localhost:4000/auth')
+//   connectFirestoreEmulator(FIRESTORE_DB,'localhost',4000)
+// // }
+
+export {FIREBASE_APP,FIRESTORE_DB,FIREBASE_AUTH}
+

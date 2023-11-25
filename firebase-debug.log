@@ -1,0 +1,115 @@
+[debug] [2023-11-25T09:20:32.842Z] ----------------------------------------------------------------------
+[debug] [2023-11-25T09:20:32.845Z] Command:       /usr/bin/node /home/coding/Desktop/projects/admin/next_13_admin/customer-db/node_modules/firebase-tools/lib/bin/firebase.js emulators:start
+[debug] [2023-11-25T09:20:32.845Z] CLI Version:   12.9.1
+[debug] [2023-11-25T09:20:32.846Z] Platform:      linux
+[debug] [2023-11-25T09:20:32.846Z] Node Version:  v18.16.0
+[debug] [2023-11-25T09:20:32.847Z] Time:          Sat Nov 25 2023 04:20:32 GMT-0500 (Eastern Standard Time)
+[debug] [2023-11-25T09:20:32.847Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-11-25T09:20:33.061Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-11-25T09:20:33.062Z] > authorizing via signed-in user (abdallahantony55.aa@gmail.com)
+[debug] [2023-11-25T09:20:33.115Z] openjdk version "19.0.2" 2023-01-17
+
+[debug] [2023-11-25T09:20:33.116Z] OpenJDK Runtime Environment (build 19.0.2+7-Ubuntu-0ubuntu322.04)
+OpenJDK 64-Bit Server VM (build 19.0.2+7-Ubuntu-0ubuntu322.04, mixed mode, sharing)
+
+[debug] [2023-11-25T09:20:33.122Z] Parsed Java major version: 19
+[info] i  emulators: Starting emulators: auth, firestore {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, firestore"}}
+[debug] [2023-11-25T09:20:33.133Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-11-25T09:20:33.133Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-11-25T09:20:33.134Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-11-25T09:20:33.134Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-11-25T09:20:33.134Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2023-11-25T09:20:33.159Z] [hub] writing locator at /tmp/hub-customer-db-2701b.json
+[debug] [2023-11-25T09:20:33.179Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2023-11-25T09:20:33.179Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2023-11-25T09:20:33.180Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","/home/coding/.cache/firebase/emulators/cloud-firestore-emulator-v1.18.2.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","customer-db-2701b","--rules","/home/coding/Desktop/projects/admin/next_13_admin/customer-db/firestore.rules","--single_project_mode",true],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"/home/coding/.cache/firebase/emulators/cloud-firestore-emulator-v1.18.2.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"customer-db-2701b\",\"--rules\",\"/home/coding/Desktop/projects/admin/next_13_admin/customer-db/firestore.rules\",\"--single_project_mode\",true],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2023-11-25T09:20:34.863Z] Nov 25, 2023 4:20:34 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://127.0.0.1:9150
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Nov 25, 2023 4:20:34 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\nINFO: Started WebSocket server on ws://127.0.0.1:9150\n"}}
+[debug] [2023-11-25T09:20:34.927Z] API endpoint: http:// {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://"}}
+[debug] [2023-11-25T09:20:34.928Z] 127.0.0.1:8080
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=127.0.0.1:8080
+
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"127.0.0.1:8080\nIf you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\n\n   export FIRESTORE_EMULATOR_HOST=127.0.0.1:8080\n\nDev App Server is now running.\n\n"}}
+[info] ✔  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[debug] [2023-11-25T09:20:49.471Z] Nov 25, 2023 4:20:45 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Nov 25, 2023 4:20:45 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\nINFO: Connected to new websocket client\n"}}
+[debug] [2023-11-25T09:20:49.483Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2023-11-25T09:20:49.483Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2023-11-25T09:20:49.484Z] Starting Emulator UI with command {"binary":"node","args":["/home/coding/.cache/firebase/emulators/ui-v1.11.7/server/server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/home/coding/.cache/firebase/emulators/ui-v1.11.7/server/server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2023-11-25T09:20:49.666Z] Web / API server started at 127.0.0.1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
+[debug] [2023-11-25T09:20:49.667Z] Web / API server started at ::1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬─────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI             │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Authentication │ 127.0.0.1:9099 │ http://127.0.0.1:4000/auth      │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Firestore      │ 127.0.0.1:8080 │ http://127.0.0.1:4000/firestore │
+└────────────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500, 9150
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2023-11-25T09:42:53.299Z] Nov 25, 2023 4:42:53 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Nov 25, 2023 4:42:53 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2023-11-25T09:42:53.522Z] Nov 25, 2023 4:42:53 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Nov 25, 2023 4:42:53 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2023-11-25T09:43:06.923Z] Nov 25, 2023 4:43:06 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed
+INFO: Websocket client disconnected
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Nov 25, 2023 4:43:06 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed\nINFO: Websocket client disconnected\n"}}
+[debug] [2023-11-25T09:45:32.001Z] Received signal SIGINT (Ctrl-C) 1
+[info]  
+[info] i  emulators: Received SIGINT (Ctrl-C) for the first time. Starting a clean shutdown. 
+[info] i  emulators: Please wait for a clean shutdown or send the SIGINT (Ctrl-C) signal again to stop right now. 
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[info] i  ui: Stopping Emulator UI {"metadata":{"emulator":{"name":"ui"},"message":"Stopping Emulator UI"}}
+[debug] [2023-11-25T09:45:32.013Z] Received signal SIGTERM 1
+[info]  
+[info] i  emulators: Received SIGTERM for the first time. Starting a clean shutdown. 
+[info] i  emulators: Please wait for a clean shutdown or send the SIGTERM signal again to stop right now. 
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[info] i  ui: Stopping Emulator UI {"metadata":{"emulator":{"name":"ui"},"message":"Stopping Emulator UI"}}
+[warn] ⚠  Emulator UI has exited upon receiving signal: SIGINT 
+[info] i  firestore: Stopping Firestore Emulator {"metadata":{"emulator":{"name":"firestore"},"message":"Stopping Firestore Emulator"}}
+[info] i  firestore: Stopping Firestore Emulator {"metadata":{"emulator":{"name":"firestore"},"message":"Stopping Firestore Emulator"}}
+[debug] [2023-11-25T09:45:32.026Z] *** shutting down gRPC server since JVM is shutting down
+ {"metadata":{"emulator":{"name":"firestore"},"message":"*** shutting down gRPC server since JVM is shutting down\n"}}
+[debug] [2023-11-25T09:45:32.087Z] 23 {"metadata":{"emulator":{"name":"firestore"},"message":"23"}}
+[debug] [2023-11-25T09:45:32.088Z] 1125 04:45:32. {"metadata":{"emulator":{"name":"firestore"},"message":"1125 04:45:32."}}
+[debug] [2023-11-25T09:45:32.089Z] 040:I 1 [main] [com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer. {"metadata":{"emulator":{"name":"firestore"},"message":"040:I 1 [main] [com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer."}}
+[debug] [2023-11-25T09:45:32.089Z] stop:80] Stopping WebSocket server...
+ {"metadata":{"emulator":{"name":"firestore"},"message":"stop:80] Stopping WebSocket server...\n"}}
+[debug] [2023-11-25T09:45:32.090Z] *** server shut down
+ {"metadata":{"emulator":{"name":"firestore"},"message":"*** server shut down\n"}}
+[info] i  auth: Stopping Authentication Emulator {"metadata":{"emulator":{"name":"auth"},"message":"Stopping Authentication Emulator"}}
+[info] i  auth: Stopping Authentication Emulator {"metadata":{"emulator":{"name":"auth"},"message":"Stopping Authentication Emulator"}}
+[info] i  hub: Stopping emulator hub {"metadata":{"emulator":{"name":"hub"},"message":"Stopping emulator hub"}}
+[info] i  hub: Stopping emulator hub {"metadata":{"emulator":{"name":"hub"},"message":"Stopping emulator hub"}}
+[warn] ⚠  hub: Error stopping emulator hub {"metadata":{"emulator":{"name":"hub"},"message":"Error stopping emulator hub"}}
+[info] i  logging: Stopping Logging Emulator {"metadata":{"emulator":{"name":"logging"},"message":"Stopping Logging Emulator"}}
+[info] i  logging: Stopping Logging Emulator {"metadata":{"emulator":{"name":"logging"},"message":"Stopping Logging Emulator"}}
+[debug] [2023-11-25T09:45:42.475Z] Error: Timed out.
+    at Timeout._onTimeout (/home/coding/Desktop/projects/admin/next_13_admin/customer-db/node_modules/.pnpm/firebase-tools@12.9.1/node_modules/firebase-tools/lib/utils.js:254:49)
+    at listOnTimeout (node:internal/timers:569:17)
+    at process.processTimers (node:internal/timers:512:7)
+[error] 
+[error] Error: An unexpected error has occurred.

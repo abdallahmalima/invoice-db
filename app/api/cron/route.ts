@@ -2,7 +2,7 @@ import { EmailTemplate } from "../../../demo/components/email-template";
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-let i=0;
+
 
 export async function GET(request: Request) {
 
@@ -17,7 +17,7 @@ export async function GET(request: Request) {
           react: EmailTemplate({ firstName: "Malima" }),
         });
     
-        
+        console.log("yesss")
       } catch (error) {
         console.log(error)
       }
@@ -25,7 +25,7 @@ export async function GET(request: Request) {
   
   
 
-console.log(i++)
+
  
   return new Response('Yessss')
 }
