@@ -40,7 +40,7 @@ const LandingPage = () => {
         email:'',
         message:'',
     });
-    
+
     const [checked, setChecked] = useState(false);
     const [email, setEmail] = useState('');
 
@@ -70,16 +70,19 @@ const LandingPage = () => {
          headers: {
            'Content-Type': 'application/json' 
          },
-         body: JSON.stringify({phone:comment.phone}) 
+         body: JSON.stringify({
+            phone:comment.phone,
+            email:comment.email,
+        }) 
        });
 
-       const responseEmail = await fetch(urlEmail, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify({email:comment.email}) 
-      });
+    //    const responseEmail = await fetch(urlEmail, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json' 
+    //     },
+    //     body: JSON.stringify({email:comment.email}) 
+    //   });
 
      setComment({
         name:'',
