@@ -8,15 +8,15 @@ export const dynamic = 'force-dynamic';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 
-export async function POST(request: Request) {
-  const {email} = await request.json();
+export async function GET(request: Request) {
+ 
 
 
   
       try {
         const data = await resend.emails.send({
           from: 'Jasmai Media Solutions <promo@jasmai.design>',
-          to: [email],
+          to: ["abdallahantony55.aa@gmail.com"],
           subject: 'Ahsante Mteja!',
           react: EmailTemplate({ firstName: "Malima" }),
         });
