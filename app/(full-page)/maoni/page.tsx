@@ -183,7 +183,7 @@ const LandingPage = () => {
                                         <InputTextarea value={comment.message} onChange={(e) => onInputChange(e, 'message')} placeholder="Andika Maoni"  rows={5} cols={30} className="w-full md:w-30rem mb-5" style={{ padding: '1rem' }} />
 
                                       <div className='flex gap-5 '>
-                                        <Button  disabled={isLoading} label="Tuma Maoni" className=" p-3 text-xl" onClick={handleLogin}></Button>
+                                        <Button  disabled={isLoading} label={isLoading?"Loading...":"Tuma Maoni"} className=" p-3 text-xl" onClick={handleLogin}></Button>
                                         {isSubmitted && <p className="gradientt-text text-3xl">Ahsante Sana!!!</p>}
                                       </div>
                                     </div>
