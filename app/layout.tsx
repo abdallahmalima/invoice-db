@@ -7,6 +7,7 @@ import 'primeicons/primeicons.css';
 import '../styles/layout/layout.scss';
 import '../styles/demo/Demos.scss';
 import AuthCheck from '../demo/components/AuthCheck';
+import './global.css'
 
 interface RootLayoutProps {
     children: React.ReactNode;

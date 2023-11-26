@@ -1,0 +1,20 @@
+.gradientt-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.2em;
+    font-weight: bold;
+    background: linear-gradient(45deg, #ff7e5f, #feb47b, #ffed8e, #a0e8e7, #8fc0a9, #acdbdf);
+    background-size: 300% 300%;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: gradientAnimation 8s infinite alternate;
+  }
+
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
+  }
