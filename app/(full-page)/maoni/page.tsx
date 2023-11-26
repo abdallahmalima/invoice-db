@@ -140,7 +140,7 @@ const LandingPage = () => {
                         <h1 className="text-6xl font-bold text-gray-900 line-height-2">
                             <span className="font-light block gradientt-text">Ndugu Mteja,Karibu SamakiSamaki Toa Maoni</span>
                         </h1>
-                        <p className="font-normal text-2xl line-height-3 md:mt-3 text-gray-700">Tunathamini maoni yako Kwani ndio msingi wa kuborsha huduma zetu</p>
+                        <p className="font-normal text-2xl line-height-3 md:mt-3 text-gray-700">Tunathamini maoni yako Kwani ndio msingi wa kuboresha huduma zetu</p>
                       
                     </div>
                     <div className="flex justify-content-center pt-6">
