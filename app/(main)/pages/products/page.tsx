@@ -17,7 +17,7 @@ import { Toolbar } from 'primereact/toolbar';
 import { classNames } from 'primereact/utils';
 import React, { useEffect, useRef, useState } from 'react';
 import { Demo } from '../../../../types/types';
-import { addDoc, collection, doc, updateDoc,onSnapshot, deleteDoc, where, query } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc,onSnapshot, deleteDoc, where, query, serverTimestamp } from "firebase/firestore";
 import {FIRESTORE_DB,FIREBASE_AUTH}  from "../../../../firebase.config";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import { uuid as uuidv4 } from 'uuidv4';
@@ -26,6 +26,7 @@ import { Skeleton } from 'primereact/skeleton';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useClients } from '../../../../demo/hook/DataFetcher';
 import { Badge } from 'primereact/badge';
+import { Calendar } from 'primereact/calendar';
 
 
 
@@ -60,7 +61,7 @@ const Product = () => {
     // const [isLoading,setIsLoading]=useState(false)
     const [isLoadingSubmit,setIsLoadingSubmit]=useState(false)
 
-    const [isLoading,products,setProducts]=useClients()
+    const [isLoading,setIsLoading,products,setProducts,loadProducts]=useClients()
 
 
         const addUsageInputField = ()=>{
@@ -108,32 +109,7 @@ const Product = () => {
 }
 
 
-    // useEffect(() => {
-    //     const unsubscribe=loadProducts()
-
-    //       return ()=>{unsubscribe()}
-    // }, []);
-
-    // const loadProducts=()=>{
-    //     setIsLoading(true)
-    //     const productRef=collection(FIRESTORE_DB,'products')
-    //     const subscriber=onSnapshot(productRef,{
-    //         next:(snapshot)=>{
-    //           const products:any=[];
-    //           snapshot.docs.forEach((doc)=>{
-    //             products.push({
-    //               id:doc.id,
-    //               ...doc.data()
-    //             })
-                
-    //           })
-    //           setIsLoading(false)
-    //             setProducts(products)
-    //         }
-    //       })
-
-    //       return subscriber
-    // }
+    
 
     const formatCurrency = (value: number) => {
         return value.toLocaleString('en-US', { style: 'currency', currency: 'TSH' });
@@ -177,8 +153,13 @@ const Product = () => {
                     f_name:_product.f_name,
                     l_name:_product.l_name,
                     phone:_product.phone,
-                    street:_product.street,
-                    service:_product.service,
+                    from:_product.from,
+                    destination:_product.destination,
+                    check_in:_product.check_in,
+                    check_out:_product.check_out,
+                    room_no:_product.room_no,
+                    payment:_product.payment,
+                    updatedAt:serverTimestamp(),
                  })
                 loadProducts()
                 toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
@@ -194,8 +175,13 @@ const Product = () => {
                         f_name:_product.f_name,
                         l_name:_product.l_name,
                         phone:_product.phone,
-                        street:_product.street,
-                        service:_product.service,
+                        from:_product.from,
+                       destination:_product.destination,
+                        check_in:_product.check_in,
+                        check_out:_product.check_out,
+                        room_no:_product.room_no,
+                        payment:_product.payment,
+                        createdAt:serverTimestamp(),
                        
                      })
                      loadProducts()
@@ -240,10 +226,6 @@ const Product = () => {
         
         const reff=doc(FIRESTORE_DB,`products/${product.id}`)
         deleteDoc(reff)
-
-    const storage = getStorage();
-    const storageRef = ref(storage, product.image);
-    deleteObject(storageRef);
 
         loadProducts()
         setDeleteProductDialog(false);
@@ -300,6 +282,7 @@ const Product = () => {
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, name: string) => {
         const val = (e.target && e.target.value) || '';
+        console.log(val)
         let _product = { ...product };
         _product[`${name}`] = val;
 
@@ -354,20 +337,22 @@ const Product = () => {
         );
     };
     const serviceBodyTemplate = (rowData: Demo.Product) => {
+        
         return (
             <>
-                <span className="p-column-title">Service</span>
-                {rowData.service}
+                <span className="p-column-title">Room No.</span>
+                {rowData.room_no}
             </>
         );
     };
 
 
+
     const streetBodyTemplate = (rowData: Demo.Product) => {
         return (
             <>
-                <span className="p-column-title">Street</span>
-                {rowData.street}
+                <span className="p-column-title">Payment</span>
+                {formatCurrency(rowData.payment as number)}
             </>
         );
     };
@@ -582,40 +567,62 @@ const Product = () => {
                         responsiveLayout="scroll"
                     >
                         <Column selectionMode="multiple" headerStyle={{ width: '4rem' }}></Column>
-                        <Column field="name" header="name" sortable body={nameBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
-                        <Column field="phone" header="phone" body={phoneBodyTemplate} sortable></Column>
-                        <Column field="service" header="service" body={serviceBodyTemplate} sortable></Column>
-                        <Column field="street" header="street" body={streetBodyTemplate} sortable></Column>
+                        <Column field="name" header="Client's Name" sortable body={nameBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
+                        <Column field="phone" header="Phone Number" body={phoneBodyTemplate} sortable></Column>
+                        <Column field="service" header="Room No." body={serviceBodyTemplate} sortable></Column>
+                        <Column field="street" header="Payment" body={streetBodyTemplate} sortable></Column>
                         <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
                     </DataTable>}
 
                     <Dialog visible={productDialog} style={{ width: '450px' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
     
                         <div className="field">
-                            <label htmlFor="f_name">First Name</label>
+                            <label htmlFor="f_name">First Name:</label>
                             <InputText id="f_name" value={product.f_name} onChange={(e) => onInputChange(e, 'f_name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.f_name })} />
-                            {submitted && !product.f_name && <small className="p-invalid">First Name is required.</small>}
+                            {submitted && !product.f_name && <small className="p-invalid">First Name: is required.</small>}
                         </div>
                         <div className="field">
-                            <label htmlFor="l_name">Last Name</label>
+                            <label htmlFor="l_name">Last Name:</label>
                             <InputText id="l_name" value={product.l_name} onChange={(e) => onInputChange(e, 'l_name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.l_name })} />
-                            {submitted && !product.l_name && <small className="p-invalid">Last Name is required.</small>}
+                            {submitted && !product.l_name && <small className="p-invalid">Last Name: is required.</small>}
                         </div>
                         <div className="field">
-                            <label htmlFor="phone">Phone</label>
+                            <label htmlFor="phone">Phone:</label>
                             <InputText id="phone" value={product.phone} onChange={(e) => onInputChange(e, 'phone')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.phone})} />
-                            {submitted && !product.phone && <small className="p-invalid">Phone is required.</small>}
+                            {submitted && !product.phone && <small className="p-invalid">Phone: is required.</small>}
                         </div>
                         <div className="field">
-                            <label htmlFor="street">From</label>
-                            <InputText id="street" value={product.street} onChange={(e) => onInputChange(e, 'street')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.street })} />
-                            {submitted && !product.street && <small className="p-invalid">Street is required.</small>}
+                            <label htmlFor="from">From:</label>
+                            <InputText id="from" value={product.from} onChange={(e) => onInputChange(e, 'from')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.from })} />
+                            {submitted && !product.from && <small className="p-invalid">From: is required.</small>}
+                        </div>
+                        <div className="field">
+                            <label htmlFor="destination">Destination:</label>
+                            <InputText id="destination" value={product.destination} onChange={(e) => onInputChange(e, 'destination')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.destination })} />
+                            {submitted && !product.destination && <small className="p-invalid">Destination: is required.</small>}
+                        </div>
+                        <div className="field">
+                            <label htmlFor="check_in">Check In:</label>
+                            <Calendar showIcon showButtonBar value={product.check_in} onChange={(e) => onInputChange(e, 'check_in')}   required  className={classNames({ 'p-invalid': submitted && !product.check_in })}/>
+                            {submitted && !product.check_in && <small className="p-invalid">Check In: is required.</small>}
+                        </div>
+                        <div className="field">
+                            <label htmlFor="check_out">Check Out:</label>
+                            <Calendar showIcon showButtonBar value={product.check_out} onChange={(e) => onInputChange(e, 'check_out')}   required  className={classNames({ 'p-invalid': submitted && !product.check_out })}/>
+                            {submitted && !product.check_out && <small className="p-invalid">Check Out: is required.</small>}
+                        </div>
+                        
+
+                        <div className="field">
+                            <label htmlFor="room_no">Room Number:</label>
+                            <InputText id="room_no" value={product.room_no} onChange={(e) => onInputChange(e, 'room_no')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.room_no })} />
+                            {submitted && !product.room_no && <small className="p-invalid">Room Number: Name is required.</small>}
                         </div>
 
                         <div className="field">
-                            <label htmlFor="service">Service Name:</label>
-                            <InputText id="service" value={product.service} onChange={(e) => onInputChange(e, 'service')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.service })} />
-                            {submitted && !product.service && <small className="p-invalid">Service Name is required.</small>}
+                            <label htmlFor="payment">Payment:</label>
+                            <InputNumber id="payment" value={product.payment} onChange={(e) => onInputNumberChange(e, 'payment')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.payment })}  mode="currency" currency="TZS" locale="en-TZ"  />
+                            {submitted && !product.payment && <small className="p-invalid">Payment: is required.</small>}
                         </div>
 
                         

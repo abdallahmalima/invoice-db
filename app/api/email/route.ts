@@ -1,5 +1,7 @@
-import { EmailTemplate } from "../../../demo/components/email-template";
+import { collection, getDocs } from "firebase/firestore";
+import  EmailTemplate  from "../../../demo/components/email-template";
 import { Resend } from 'resend';
+import { FIRESTORE_DB } from "../../../firebase.config";
 
 export const maxDuration = 10; // This function can run for a maximum of 5 seconds
 export const dynamic = 'force-dynamic';
@@ -10,15 +12,16 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function GET(request: Request) {
  
-
+  const clients:any =await loadLastDayClients()
+  const totalPayments:any = clients.reduce((totalPayments:number, client:any) => totalPayments + client.payment, 0);
 
   
       try {
         const data = await resend.emails.send({
-          from: 'Jasmai Media Solutions <promo@jasmai.design>',
+          from: 'Joshmal Hotels <promo@jasmai.design>',
           to: ["abdallahantony55.aa@gmail.com"],
           subject: 'Ahsante Mteja!',
-          react: EmailTemplate({ firstName: "Malima" }),
+          react: EmailTemplate({ totalPayments,numberOfClients:clients.length }),
         });
     
         console.log("yesss")
@@ -28,8 +31,30 @@ export async function GET(request: Request) {
 
   
   
-
-
  
-  return new Response('Yessss')
+  return new Response("done")
 }
+
+
+export const loadLastDayClients = async () => {
+  const products:any = [];
+  const productRef = collection(FIRESTORE_DB, 'products');
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  const querySnapshot = await getDocs(productRef);
+  querySnapshot.forEach((doc) => {
+    const productData = doc.data();
+    const checkInDate = productData.check_in?.toDate(); // Assuming check_in is a Firestore Timestamp
+
+    // Check if check_in is yesterday
+    if (checkInDate && checkInDate.toDateString() === yesterday.toDateString()) {
+      products.push({
+        id: doc.id,
+        ...productData
+      });
+    }
+  });
+
+  return products;
+};
