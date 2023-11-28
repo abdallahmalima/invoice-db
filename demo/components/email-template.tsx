@@ -20,7 +20,7 @@ const EmailTemplate: React.FC<EmailTemplateProps> = ({
       <p style={reportStyle}>Yesterday's Report:</p>
       <p style={figureStyle}>{`Sales: ${formattedTotalPayments}`}</p>
       <p style={figureStyle}>{`Clients: ${numberOfClients}`}</p>
-      <button style={buttonStyle} onClick={() => window.location.href = 'link-to-more-info'}>
+      <button style={buttonStyle} onClick={() => window.location.href = 'https://joshmal.jasmai.design/pages/products'}>
         More Info
       </button>
     </div>
