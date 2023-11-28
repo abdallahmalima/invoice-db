@@ -5,10 +5,7 @@ interface EmailTemplateProps {
   numberOfClients: number;
 }
 
-const EmailTemplate: React.FC<EmailTemplateProps> = ({
-  totalPayments,
-  numberOfClients,
-}) => {
+const EmailTemplate: React.FC<EmailTemplateProps> = ({ totalPayments, numberOfClients }) => {
   const formattedTotalPayments = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'TZS',
@@ -20,9 +17,9 @@ const EmailTemplate: React.FC<EmailTemplateProps> = ({
       <p style={reportStyle}>Yesterday's Report:</p>
       <p style={figureStyle}>{`Sales: ${formattedTotalPayments}`}</p>
       <p style={figureStyle}>{`Clients: ${numberOfClients}`}</p>
-      <button style={buttonStyle} onClick={() => window.location.href = 'https://joshmal.jasmai.design/pages/products'}>
+      <a style={buttonStyle} href="https://joshmal.jasmai.design/pages/products">
         More Info
-      </button>
+      </a>
     </div>
   );
 };
@@ -65,6 +62,9 @@ const buttonStyle: React.CSSProperties = {
   borderRadius: '4px',
   cursor: 'pointer',
   fontSize: '16px',
+  textDecoration: 'none',
+  display: 'inline-block',
+  margin: '10px 0',
 };
 
 export default EmailTemplate;
