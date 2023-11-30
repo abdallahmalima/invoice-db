@@ -35,7 +35,7 @@ export async function POST(request: Request) {
             source_addr: source_addr,
             schedule_time: "",
             encoding: 0,
-            message: "Ndugu mteja, SamakiSamaki tunashukuru kwa maoni yako",
+            message: "Ndugu mteja, Joshmal Hotel tunashukuru kwa maoni yako",
             recipients: [
               {
                 recipient_id: 1,

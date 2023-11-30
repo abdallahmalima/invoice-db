@@ -20,9 +20,9 @@ export const  useClients=()=>{
             next:(snapshot)=>{
               const products:any=[];
               snapshot.docs.forEach((doc)=>{
-                const check_in=doc.data().check_in.toDate()
-                const check_out=doc.data().check_out.toDate()
-                const createdAt=doc.data().createdAt.toDate()
+                const check_in=doc.data().check_in?.toDate()
+                const check_out=doc.data().check_out?.toDate()
+                const createdAt=doc.data().createdAt?.toDate()
                 products.push({
                   id:doc.id,
                   ...doc.data(),
