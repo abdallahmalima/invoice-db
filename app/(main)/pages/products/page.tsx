@@ -366,7 +366,7 @@ const Product = () => {
         return (
             <>
                 <span className="p-column-title">Payment</span>
-                {formatCurrency(rowData.payment as number)}
+                {formatCurrency(rowData.payment as number)}{'/='}
             </>
         );
     };
