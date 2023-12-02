@@ -1,4 +1,4 @@
-import { EmailTemplate } from "../../../demo/components/email-template";
+import { EmailTemplate } from "../../../demo/components/emails/email-template";
 import { Resend } from 'resend';
 
 export const maxDuration = 10; // This function can run for a maximum of 5 seconds
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
 
       try {
         const data = await resend.emails.send({
-          from: 'Jasmai Media Solutions <promo@jasmai.design>',
+          from: 'Joshmal Hotels <promo@jasmai.design>',
           to: [email],
           subject: 'Ahsante Mteja!',
           react: EmailTemplate({ firstName: "Malima" }),
