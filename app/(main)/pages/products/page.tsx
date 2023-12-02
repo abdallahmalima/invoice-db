@@ -28,6 +28,9 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import { useClients } from '../../../../demo/hook/DataFetcher';
 import { Badge } from 'primereact/badge';
 import { Calendar } from 'primereact/calendar';
+import LoadingSpinner from '../../../../demo/components/LoadingSpinner';
+import { ScrollTop } from 'primereact/scrolltop';
+import { UserAuth } from '../../../../demo/components/context/AuthContext';
 
 
 
@@ -65,6 +68,9 @@ const Product = () => {
     const [isLoading, setIsLoading, products, setProducts, loadProducts] = useClients()
 
 
+   
+
+    
 
 
     const dropdownValues: InputValue[] = [
@@ -171,6 +177,7 @@ const Product = () => {
                     payment: _product.payment,
                     id_no:_product.id_no,
                     room_type:_product.room_type,
+                    updatedBy:FIREBASE_AUTH.currentUser?.uid,
                     updatedAt: serverTimestamp(),
                 })
                 loadProducts()
@@ -182,6 +189,7 @@ const Product = () => {
 
             } else {
                 if (true) {
+                    setIsLoadingSubmit(true)
                     console.log(_product.room_type)
                     const doc = await addDoc(collection(FIRESTORE_DB, 'products'), {
                         f_name: _product.f_name,
@@ -195,6 +203,7 @@ const Product = () => {
                         payment: _product.payment,
                         id_no:_product.id_no,
                         room_type:_product.room_type,
+                        createdBy:FIREBASE_AUTH.currentUser?.uid,
                         createdAt: serverTimestamp(),
 
                     })
@@ -451,23 +460,52 @@ const Product = () => {
 
     const isFormFilled = () => {
 
-        if (product.id) {
-            return product.f_name?.length > 0 &&
-                product.l_name?.length > 0
-        }
-
         return product.f_name?.length > 0 &&
-            product.f_name?.length > 0
+            product.l_name?.length > 0 &&
+            product.phone?.length > 0 &&
+            product.from?.length > 0 &&
+            product.destination?.length > 0 &&
+            product.check_in  &&
+            product.check_out &&
+            product.room_no?.length > 0 &&
+            product.room_type && 
+            product.id_no?.length > 0 &&
+            product.payment > 0
+            
 
 
     }
 
-    const productDialogFooter = (
+
+    const productDialogFooter =()=> {
+        const hasData= !! product?.f_name?.trim()
+      return (
         <>
+      <div className={hasData && `flex items-center justify-between`}>
+
+         {hasData && <div className="mr-auto mt-5">
+            <span className="text-500">By:</span>
+            <span className="text-green-500 font-medium">Joyce Japhet </span>
+            
+            </div>}
+
+          <div className={hasData && `flex space-x-4`}>
             <Button label="Cancel" icon="pi pi-times" text onClick={hideDialog} />
-            <Button label={!isLoadingSubmit ? `Save` : <ProgressSpinner style={{ width: '29px', height: '29px' }} />} icon={!isLoadingSubmit && `pi pi-check`} text onClick={saveProduct} disabled={!isFormFilled() || isLoadingSubmit} />
+            <Button
+              label={!isLoadingSubmit ? `Save` : <LoadingSpinner />}
+              icon={!isLoadingSubmit && `pi pi-check`}
+              text
+              onClick={saveProduct}
+              disabled={!isFormFilled() || isLoadingSubmit}
+            />
+          </div>
+        </div>
         </>
-    );
+      )
+    };
+      
+
+
     const deleteProductDialogFooter = (
         <>
             <Button label="No" icon="pi pi-times" text onClick={hideDeleteProductDialog} />
@@ -588,7 +626,8 @@ const Product = () => {
                         <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
                     </DataTable>}
 
-                    <Dialog visible={productDialog} style={{ width: '450px' }} header="Client's Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
+                    <Dialog visible={productDialog} style={{ width: '470px' }} header="Client's Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
+                    
                         <div className="formgrid grid">
                             <div className="field col">
                                 <label htmlFor="f_name">First Name:</label>
@@ -597,24 +636,24 @@ const Product = () => {
                             </div>
                             <div className="field col">
                                 <label htmlFor="l_name">Last Name:</label>
-                                <InputText placeholder='Enter Last Name' id="l_name" value={product.l_name} onChange={(e) => onInputChange(e, 'l_name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.l_name })} />
+                                <InputText placeholder='Enter Last Name' id="l_name" value={product.l_name} onChange={(e) => onInputChange(e, 'l_name')} required className={classNames({ 'p-invalid': submitted && !product.l_name })} />
                                 {submitted && !product.l_name && <small className="p-invalid">Last Name: is required.</small>}
                             </div>
                         </div>
                         <div className="field">
                             <label htmlFor="phone">Phone:</label>
-                            <InputText placeholder='Enter Phone Number' id="phone" value={product.phone} onChange={(e) => onInputChange(e, 'phone')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.phone })} />
+                            <InputText placeholder='Enter Phone Number' id="phone" value={product.phone} onChange={(e) => onInputChange(e, 'phone')} required  className={classNames({ 'p-invalid': submitted && !product.phone })} />
                             {submitted && !product.phone && <small className="p-invalid">Phone: is required.</small>}
                         </div>
                         <div className="formgrid grid">
                             <div className="field col">
                                 <label htmlFor="from">From:</label>
-                                <InputText placeholder='Enter from' id="from" value={product.from} onChange={(e) => onInputChange(e, 'from')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.from })} />
+                                <InputText placeholder='Enter from' id="from" value={product.from} onChange={(e) => onInputChange(e, 'from')} required  className={classNames({ 'p-invalid': submitted && !product.from })} />
                                 {submitted && !product.from && <small className="p-invalid">From: is required.</small>}
                             </div>
                             <div className="field col">
                                 <label htmlFor="destination">Destination:</label>
-                                <InputText placeholder='Enter  Destination' id="destination" value={product.destination} onChange={(e) => onInputChange(e, 'destination')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.destination })} />
+                                <InputText placeholder='Enter  Destination' id="destination" value={product.destination} onChange={(e) => onInputChange(e, 'destination')} required className={classNames({ 'p-invalid': submitted && !product.destination })} />
                                 {submitted && !product.destination && <small className="p-invalid">Destination: is required.</small>}
                             </div>
                         </div>
@@ -632,7 +671,7 @@ const Product = () => {
                         <div className="formgrid grid">
                             <div className="field col">
                                 <label htmlFor="room_no">Room Number:</label>
-                                <InputText placeholder='Enter Room Number' id="room_no" value={product.room_no} onChange={(e) => onInputChange(e, 'room_no')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.room_no })} />
+                                <InputText placeholder='Enter Room Number' id="room_no" value={product.room_no} onChange={(e) => onInputChange(e, 'room_no')} required  className={classNames({ 'p-invalid': submitted && !product.room_no })} />
                                 {submitted && !product.room_no && <small className="p-invalid">Room Number: Name is required.</small>}
                             </div>
 
@@ -646,18 +685,18 @@ const Product = () => {
                         <div className="formgrid grid">
                             <div className="field col">
                                 <label htmlFor="id_no">ID Number:</label>
-                                <InputText placeholder='Enter ID Number' id="id_no" value={product.id_no} onChange={(e) => onInputChange(e, 'id_no')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.id_no })} />
+                                <InputText placeholder='Enter ID Number' id="id_no" value={product.id_no} onChange={(e) => onInputChange(e, 'id_no')} required  className={classNames({ 'p-invalid': submitted && !product.id_no })} />
                                 {submitted && !product.id_no && <small className="p-invalid">ID Number: Name is required.</small>}
                             </div>
 
                             <div className="field col">
                                 <label htmlFor="payment">Payment:</label>
-                                <InputNumber placeholder='Enter Amount in Tsh' id="payment" value={product.payment} onChange={(e) => onInputNumberChange(e, 'payment')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.payment })} mode="currency" currency="TZS" locale="en-TZ" />
+                                <InputNumber placeholder='Enter Amount in Tsh' id="payment" value={product.payment} onChange={(e) => onInputNumberChange(e, 'payment')} required  className={classNames({ 'p-invalid': submitted && !product.payment })} mode="currency" currency="TZS" locale="en-TZ" />
                                 {submitted && !product.payment && <small className="p-invalid">Payment: is required.</small>}
                             </div>
                         </div>
 
-
+                       
 
                     </Dialog>
 
