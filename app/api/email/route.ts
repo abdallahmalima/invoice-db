@@ -2,6 +2,8 @@ import { collection, getDocs } from "firebase/firestore";
 import  EmailTemplate  from "../../../demo/components/email-template";
 import { Resend } from 'resend';
 import { FIRESTORE_DB } from "../../../firebase.config";
+import { initAdmin } from "../../../firebaseAdmin";
+import { getFirestore } from "firebase-admin/firestore";
 
 export const maxDuration = 10; // This function can run for a maximum of 5 seconds
 export const dynamic = 'force-dynamic';
@@ -11,6 +13,8 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 
 export async function GET(request: Request) {
+
+  await initAdmin();
  
   const clients:any =await loadLastDayClients()
   const totalPayments:any = clients.reduce((totalPayments:number, client:any) => totalPayments + client.payment, 0);
@@ -37,12 +41,15 @@ export async function GET(request: Request) {
 
 
 export const loadLastDayClients = async () => {
+  const firestore = getFirestore();
+  const productRef = await firestore.collection( 'products').get();
+
   const products:any = [];
-  const productRef = collection(FIRESTORE_DB, 'products');
+ 
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
 
-  const querySnapshot = await getDocs(productRef);
+  const querySnapshot = productRef.docs;
   querySnapshot.forEach((doc) => {
     const productData = doc.data();
     const checkInDate = productData.check_in?.toDate(); // Assuming check_in is a Firestore Timestamp
