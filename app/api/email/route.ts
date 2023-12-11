@@ -17,21 +17,14 @@ export async function GET(request: Request) {
   await initAdmin();
  
   const clients:any =await loadLastDayClients()
-<<<<<<< HEAD
   const emails:any =await loadReportEmails()
-=======
->>>>>>> 5985b220a6bc2df5bb5c310cde96f6a1a39ae6a4
   const totalPayments:any = clients.reduce((totalPayments:number, client:any) => totalPayments + client.payment, 0);
 
   
       try {
         const data = await resend.emails.send({
           from: 'Joshmal Hotels <promo@jasmai.design>',
-<<<<<<< HEAD
           to: emails,
-=======
-          to: ["abdallahantony55.aa@gmail.com"],
->>>>>>> 5985b220a6bc2df5bb5c310cde96f6a1a39ae6a4
           subject: 'Sales Report',
           react: EmailTemplate({ totalPayments,numberOfClients:clients.length }),
         });
@@ -73,7 +66,6 @@ export const loadLastDayClients = async () => {
 
   return products;
 };
-<<<<<<< HEAD
 
 export const loadReportEmails = async () => {
   const firestore = getFirestore();
@@ -95,5 +87,3 @@ export const loadReportEmails = async () => {
 
   return products.map((product:any)=>product.email);
 };
-=======
->>>>>>> 5985b220a6bc2df5bb5c310cde96f6a1a39ae6a4

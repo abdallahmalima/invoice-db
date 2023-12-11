@@ -48,7 +48,6 @@ export const  useClients=()=>{
             setProducts,
             loadProducts
           ]
-<<<<<<< HEAD
 }
 
 
@@ -92,6 +91,4 @@ export const  useRooms=()=>{
           setRooms,
           loadRooms,
         ]
-=======
->>>>>>> 5985b220a6bc2df5bb5c310cde96f6a1a39ae6a4
 }
