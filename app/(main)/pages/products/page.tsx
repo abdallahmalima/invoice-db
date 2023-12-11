@@ -679,11 +679,11 @@ const Product = () => {
                             </div>
 
 
-                            <div className="field col">
+                            {/* <div className="field col">
                                 <label htmlFor="room_type">Room Type:</label>
                                 <Dropdown id="room_type" value={product.room_type} onChange={(e) => onInputNumberChange(e, 'room_type')} options={rooms} optionLabel="name" placeholder="Select Room Type" required className={classNames({ 'p-invalid': submitted && !product.room_type })} />
                                 {submitted && !product.room_type && <small className="p-invalid">Room Type: is required.</small>}
-                            </div>
+                            </div> */}
                         </div>
                         <div className="formgrid grid">
                             <div className="field col">
