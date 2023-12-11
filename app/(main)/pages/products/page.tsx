@@ -74,10 +74,10 @@ const Product = () => {
 
 
     const dropdownValues: InputValue[] = [
-        { name: 'Single', code: '1' },
-        { name: 'Double', code: '2' },
-        { name: 'Twin Bed', code: '3' },
-        { name: 'Executive', code: '4' },
+        { name: 'Single', code: '111' },
+        { name: 'Double', code: '222' },
+        { name: 'Twin Bed', code: '333' },
+        { name: 'Executive', code: '444' },
     ];
 
 
