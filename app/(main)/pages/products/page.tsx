@@ -25,7 +25,7 @@ import { uuid as uuidv4 } from 'uuidv4';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { Skeleton } from 'primereact/skeleton';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import { useClients } from '../../../../demo/hook/DataFetcher';
+import { useClients ,useRooms } from '../../../../demo/hook/DataFetcher';
 import { Badge } from 'primereact/badge';
 import { Calendar } from 'primereact/calendar';
 import LoadingSpinner from '../../../../demo/components/LoadingSpinner';
@@ -66,6 +66,8 @@ const Product = () => {
     const [isLoadingSubmit, setIsLoadingSubmit] = useState(false)
 
     const [isLoading, setIsLoading, products, setProducts, loadProducts] = useClients()
+
+    const [isLoadingRoom, setIsLoadingRoom, rooms, setRooms] = useRooms()
 
 
    
@@ -679,7 +681,7 @@ const Product = () => {
 
                             <div className="field col">
                                 <label htmlFor="room_type">Room Type:</label>
-                                <Dropdown id="room_type" value={product.room_type} onChange={(e) => onInputNumberChange(e, 'room_type')} options={dropdownValues} optionLabel="name" placeholder="Select Room Type" required className={classNames({ 'p-invalid': submitted && !product.room_type })} />
+                                <Dropdown id="room_type" value={product.room_type} onChange={(e) => onInputNumberChange(e, 'room_type')} options={rooms} optionLabel="name" placeholder="Select Room Type" required className={classNames({ 'p-invalid': submitted && !product.room_type })} />
                                 {submitted && !product.room_type && <small className="p-invalid">Room Type: is required.</small>}
                             </div>
                         </div>

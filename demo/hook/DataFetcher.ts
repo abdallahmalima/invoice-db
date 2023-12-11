@@ -49,3 +49,46 @@ export const  useClients=()=>{
             loadProducts
           ]
 }
+
+
+export const  useRooms=()=>{
+  const [isLoadingRoom,setIsLoadingRoom]=useState(false)
+  const [rooms, setRooms] = useState<Demo.Product[]>([]);
+
+  useEffect(() => {
+      const unsubscribe=loadRooms()
+
+        return ()=>{unsubscribe()}
+  }, []);
+
+  const loadRooms=()=>{
+      setIsLoadingRoom(true)
+      const productRef=collection(FIRESTORE_DB,'room_types')
+      const subscriber=onSnapshot(productRef,{
+          next:(snapshot)=>{
+            const products:any=[];
+            snapshot.docs.forEach((doc)=>{
+              
+              products.push({
+                id:doc.id,
+                ...doc.data(),
+              })
+              
+            })
+            console.log(products)
+              setIsLoadingRoom(false)
+              setRooms(products)
+          }
+        })
+
+        return subscriber
+  }
+
+  return [
+          isLoadingRoom,
+          setIsLoadingRoom,
+          rooms,
+          setRooms,
+          loadRooms,
+        ]
+}
