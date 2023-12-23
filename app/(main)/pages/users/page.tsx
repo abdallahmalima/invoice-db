@@ -22,19 +22,17 @@ import { addDoc, collection, doc, updateDoc, onSnapshot, deleteDoc, where, query
 import { FIRESTORE_DB, FIREBASE_AUTH } from "../../../../firebase.config";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import { uuid as uuidv4 } from 'uuidv4';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 import { Skeleton } from 'primereact/skeleton';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import { useClients ,useRooms } from '../../../../demo/hook/DataFetcher';
+import { useClients, useUsers } from '../../../../demo/hook/DataFetcher';
 import { Badge } from 'primereact/badge';
 import { Calendar } from 'primereact/calendar';
 import LoadingSpinner from '../../../../demo/components/LoadingSpinner';
 import { ScrollTop } from 'primereact/scrolltop';
 import { UserAuth } from '../../../../demo/components/context/AuthContext';
-import ReactPDF, { PDFDownloadLink } from '@react-pdf/renderer';
-import MyDocument from '../../../../demo/components/MyDocument';
-import { useRouter } from 'next/navigation';
-
+import { Password } from 'primereact/password';
+import { deleteUser } from '../../../../actions/deleteUser';
 
 
 
@@ -60,8 +58,6 @@ const Product = () => {
     const [selectedProducts, setSelectedProducts] = useState<Demo.Product[]>([]);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
     const toast = useRef<Toast>(null);
     const dt = useRef<DataTable<Demo.Product[]>>(null);
     const fileUploadRef = useRef<FileUpload>(null);
@@ -71,21 +67,17 @@ const Product = () => {
     // const [isLoading,setIsLoading]=useState(false)
     const [isLoadingSubmit, setIsLoadingSubmit] = useState(false)
 
-    const [isLoading, setIsLoading, products, setProducts, loadProducts] = useClients()
+    const [isLoading, setIsLoading, products, setProducts, loadProducts] = useUsers()
 
-    const [isLoadingRoom, setIsLoadingRoom, rooms, setRooms] = useRooms()
 
-   const router=useRouter()
    
 
     
 
 
     const dropdownValues: InputValue[] = [
-        { name: 'Single', code: '111' },
-        { name: 'Double', code: '222' },
-        { name: 'Twin Bed', code: '333' },
-        { name: 'Executive', code: '444' },
+        { name: 'Arusha', code: '1' },
+        { name: 'Babati', code: '2' },
     ];
 
 
@@ -152,14 +144,6 @@ const Product = () => {
         setProduct(emptyProduct);
         setSubmitted(false);
         setProductDialog(true);
-        
-    };
-    const openPrint = () => {
-       
-        const start_date=new Date(startDate).toLocaleDateString('en-US')
-        const end_date=new Date(endDate).toLocaleDateString('en-US')
-        const url = `/reports?start_date=${start_date}&end_date=${end_date}`;
-        window.open(url, '_blank');
     };
 
     const hideDialog = () => {
@@ -181,21 +165,13 @@ const Product = () => {
             let _product = { ...product };
             if (product.id) {
                 setIsLoadingSubmit(true)
-                const ref = doc(FIRESTORE_DB, `products/${product.id}`)
+                const ref = doc(FIRESTORE_DB, `users/${product.id}`)
                 await updateDoc(ref, {
                     f_name: _product.f_name,
                     l_name: _product.l_name,
                     phone: _product.phone,
-                    from: _product.from,
-                    destination: _product.destination,
-                    check_in: _product.check_in,
-                    check_out: _product.check_out,
-                    room_no: _product.room_no,
-                    payment: _product.payment,
-                    id_no:_product.id_no,
-                    room_type:_product.room_type,
-                    updatedBy:FIREBASE_AUTH.currentUser?.uid,
-                    updatedAt: serverTimestamp(),
+                    branch: _product.branch,
+                    
                 })
                 loadProducts()
                 toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Client Updated', life: 3000 });
@@ -206,26 +182,39 @@ const Product = () => {
 
             } else {
                 if (true) {
-                    setIsLoadingSubmit(true)
-                    console.log(_product.room_type)
-                    const doc = await addDoc(collection(FIRESTORE_DB, 'products'), {
+                   
+                  
+
+
+                    createUserWithEmailAndPassword(FIREBASE_AUTH,  _product.email as string, _product.password as string)
+                    .then(async (userCredential:any) => {
+                      // Signed up 
+                      const {user} = userCredential;
+                    
+                      setIsLoadingSubmit(true)
+                      const doc = await addDoc(collection(FIRESTORE_DB, 'users'), {
                         f_name: _product.f_name,
                         l_name: _product.l_name,
                         phone: _product.phone,
-                        from: _product.from,
-                        destination: _product.destination,
-                        check_in: _product.check_in,
-                        check_out: _product.check_out,
-                        room_no: _product.room_no,
-                        payment: _product.payment,
-                        id_no:_product.id_no,
-                        room_type:_product.room_type,
-                        createdBy:FIREBASE_AUTH.currentUser?.uid,
-                        createdAt: serverTimestamp(),
-
+                        branch: _product.branch,
+                         uid:user.uid
+                        })
+                        console.log(user)
+                        loadProducts()
+                        toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Client Created', life: 3000 });
+                      
+                      
                     })
-                    loadProducts()
-                    toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Client Created', life: 3000 });
+                    .catch((error) => {
+                      const errorCode = error.code;
+                      const errorMessage = error.message;
+                      console.log(errorMessage)
+                      // ..
+                    });
+
+
+
+                   
 
 
 
@@ -262,10 +251,13 @@ const Product = () => {
         setDeleteProductDialog(true);
     };
 
-    const deleteProduct = () => {
+    const deleteProduct = async() => {
 
-        const reff = doc(FIRESTORE_DB, `products/${product.id}`)
-        deleteDoc(reff)
+        // const reff = doc(FIRESTORE_DB, `users/${product.id}`)
+        // deleteDoc(reff)
+        const formData=new FormData()
+        formData.append('uid',product.id)
+        await deleteUser(formData)
 
         loadProducts()
         setDeleteProductDialog(false);
@@ -337,28 +329,12 @@ const Product = () => {
         setProduct(_product);
     };
 
-    const leftToolbarTemplate = () => {
-        return (
-            <React.Fragment>
-                <div className="my-2 flex">
-                <Button icon="pi pi-print" severity="danger"  onClick={openPrint}/>
-                <div className='ml-3'>
-                <Calendar placeholder='Start Date' showIcon showButtonBar value={startDate} onChange={(e)=>setStartDate(e.target.value)} />
-                </div>
-                <div className='ml-3'>
-                <Calendar placeholder='End Date' showIcon showButtonBar value={endDate} onChange={(e)=>setEndDate(e.target.value)} />
-                </div>
-                </div>
-            </React.Fragment>
-        );
-    };
-
     const rightToolbarTemplate = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    
                     <Button label="New" icon="pi pi-plus" severity="success" className=" mr-2" onClick={openNew} />
+                    <Button label="Delete" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} />
                 </div>
             </React.Fragment>
         );
@@ -396,8 +372,8 @@ const Product = () => {
 
         return (
             <>
-                <span className="p-column-title">Room No.</span>
-                {rowData.room_no}
+                <span className="p-column-title">Email</span>
+                {rowData.email}
             </>
         );
     };
@@ -407,8 +383,8 @@ const Product = () => {
     const streetBodyTemplate = (rowData: Demo.Product) => {
         return (
             <>
-                <span className="p-column-title">Payment</span>
-                {formatCurrency(rowData.payment as number)}{'/='}
+                <span className="p-column-title">Branch</span>
+                {rowData.branch?.name}
             </>
         );
     };
@@ -496,14 +472,9 @@ const Product = () => {
         return product.f_name?.length > 0 &&
             product.l_name?.length > 0 &&
             product.phone?.length > 0 &&
-            product.from?.length > 0 &&
-            product.destination?.length > 0 &&
-            product.check_in  &&
-            product.check_out &&
-            product.room_no?.length > 0 &&
-            product.room_type && 
-            product.id_no?.length > 0 &&
-            product.payment > 0
+            product.email?.length > 0 &&
+            product.password?.length > 0 
+          
             
 
 
@@ -619,7 +590,7 @@ const Product = () => {
             <div className="col-12">
                 <div className="card">
                     <Toast ref={toast} />
-                    <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
+                    <Toolbar className="mb-4" right={rightToolbarTemplate}></Toolbar>
 
                     {isLoading && <DataTable
                         value={[{}, {}, {}, {}, {}, {}, {}, {}, {}]}
@@ -673,62 +644,31 @@ const Product = () => {
                                 {submitted && !product.l_name && <small className="p-invalid">Last Name: is required.</small>}
                             </div>
                         </div>
-                        <div className="field">
+                        <div className="formgrid grid">
+                        <div className="field col">
                             <label htmlFor="phone">Phone:</label>
                             <InputText placeholder='Enter Phone Number' id="phone" value={product.phone} onChange={(e) => onInputChange(e, 'phone')} required  className={classNames({ 'p-invalid': submitted && !product.phone })} />
                             {submitted && !product.phone && <small className="p-invalid">Phone: is required.</small>}
                         </div>
-                        <div className="formgrid grid">
-                            <div className="field col">
-                                <label htmlFor="from">From:</label>
-                                <InputText placeholder='Enter from' id="from" value={product.from} onChange={(e) => onInputChange(e, 'from')} required  className={classNames({ 'p-invalid': submitted && !product.from })} />
-                                {submitted && !product.from && <small className="p-invalid">From: is required.</small>}
-                            </div>
-                            <div className="field col">
-                                <label htmlFor="destination">Destination:</label>
-                                <InputText placeholder='Enter  Destination' id="destination" value={product.destination} onChange={(e) => onInputChange(e, 'destination')} required className={classNames({ 'p-invalid': submitted && !product.destination })} />
-                                {submitted && !product.destination && <small className="p-invalid">Destination: is required.</small>}
-                            </div>
+                        <div className="field col">
+                            <label htmlFor="email">Email:</label>
+                            <InputText placeholder='Enter Email' id="email" value={product.email} onChange={(e) => onInputChange(e, 'email')} required  className={classNames({ 'p-invalid': submitted && !product.email })} />
+                            {submitted && !product.email && <small className="p-invalid">Email: is required.</small>}
                         </div>
-                        <div className="field">
-                            <label htmlFor="check_in">Check In:</label>
-                            <Calendar placeholder='Enter CheckIn Date' showIcon showButtonBar value={product.check_in} onChange={(e) => onInputChange(e, 'check_in')} required className={classNames({ 'p-invalid': submitted && !product.check_in })} />
-                            {submitted && !product.check_in && <small className="p-invalid">Check In: is required.</small>}
-                        </div>
-                        <div className="field">
-                            <label htmlFor="check_out">Check Out:</label>
-                            <Calendar placeholder='Enter CheckOut Date' showIcon showButtonBar value={product.check_out} onChange={(e) => onInputChange(e, 'check_out')} required className={classNames({ 'p-invalid': submitted && !product.check_out })} />
-                            {submitted && !product.check_out && <small className="p-invalid">Check Out: is required.</small>}
-                        </div>
-
-                        <div className="formgrid grid">
-                            <div className="field col">
-                                <label htmlFor="room_no">Room Number:</label>
-                                <InputText placeholder='Enter Room Number' id="room_no" value={product.room_no} onChange={(e) => onInputChange(e, 'room_no')} required  className={classNames({ 'p-invalid': submitted && !product.room_no })} />
-                                {submitted && !product.room_no && <small className="p-invalid">Room Number: Name is required.</small>}
-                            </div>
-
-
-                            <div className="field col">
-                                <label htmlFor="room_type">Room Type:</label>
-                                <Dropdown id="room_type" value={product.room_type} onChange={(e) => onInputNumberChange(e, 'room_type')} options={rooms} optionLabel="name" placeholder="Select Room Type" required className={classNames({ 'p-invalid': submitted && !product.room_type })} />
-                                {submitted && !product.room_type && <small className="p-invalid">Room Type: is required.</small>}
-                            </div>
                         </div>
                         <div className="formgrid grid">
-                            <div className="field col">
-                                <label htmlFor="id_no">ID Number:</label>
-                                <InputText placeholder='Enter ID Number' id="id_no" value={product.id_no} onChange={(e) => onInputChange(e, 'id_no')} required  className={classNames({ 'p-invalid': submitted && !product.id_no })} />
-                                {submitted && !product.id_no && <small className="p-invalid">ID Number: Name is required.</small>}
+                        <div className="field col">
+                                <label htmlFor="branch">Branch:</label>
+                                <Dropdown id="branch" value={product.branch} onChange={(e) => onInputNumberChange(e, 'branch')} options={dropdownValues} optionLabel="name" placeholder="Select Branch" required className={classNames({ 'p-invalid': submitted && !product.branch })} />
+                                {submitted && !product.branch && <small className="p-invalid">Branch: is required.</small>}
                             </div>
-
-                            <div className="field col">
-                                <label htmlFor="payment">Payment:</label>
-                                <InputNumber placeholder='Enter Amount in Tsh' id="payment" value={product.payment} onChange={(e) => onInputNumberChange(e, 'payment')} required  className={classNames({ 'p-invalid': submitted && !product.payment })} mode="currency" currency="TZS" locale="en-TZ" />
-                                {submitted && !product.payment && <small className="p-invalid">Payment: is required.</small>}
-                            </div>
+                        <div className="field col">
+                            <label htmlFor="password">Password:</label>
+                            <Password placeholder='Enter Password' id="password" value={product.password} onChange={(e) => onInputChange(e, 'password')} required  className={classNames({ 'p-invalid': submitted && !product.password })} />
+                            {submitted && !product.password && <small className="p-invalid">Passoword: is required.</small>}
                         </div>
-
+                        </div>
+                        
                        
 
                     </Dialog>
