@@ -20,6 +20,12 @@ dependencies:
   chart.js:
     specifier: 4.2.1
     version: 4.2.1
+  date-fns:
+    specifier: ^3.0.6
+    version: 3.0.6
+  date-fns-tz:
+    specifier: ^2.0.0
+    version: 2.0.0(date-fns@3.0.6)
   firebase:
     specifier: ^10.6.0
     version: 10.6.0
@@ -2509,6 +2515,18 @@ packages:
   /data-uri-to-buffer@6.0.1:
     resolution: {integrity: sha512-MZd3VlchQkp8rdend6vrx7MmVDJzSNTBvghvKjirLkD+WTChA3KUf0jkE68Q4UyctNqI11zZO9/x2Yx+ub5Cvg==}
     engines: {node: '>= 14'}
+    dev: false
+
+  /date-fns-tz@2.0.0(date-fns@3.0.6):
+    resolution: {integrity: sha512-OAtcLdB9vxSXTWHdT8b398ARImVwQMyjfYGkKD2zaGpHseG2UPHbHjXELReErZFxWdSLph3c2zOaaTyHfOhERQ==}
+    peerDependencies:
+      date-fns: '>=2.0.0'
+    dependencies:
+      date-fns: 3.0.6
+    dev: false
+
+  /date-fns@3.0.6:
+    resolution: {integrity: sha512-W+G99rycpKMMF2/YD064b2lE7jJGUe+EjOES7Q8BIGY8sbNdbgcs9XFTZwvzc9Jx1f3k7LB7gZaZa7f8Agzljg==}
     dev: false
 
   /debug@2.6.9:

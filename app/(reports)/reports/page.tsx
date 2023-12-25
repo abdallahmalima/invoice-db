@@ -5,7 +5,7 @@ import { PDFViewer } from '@react-pdf/renderer';
 import MyDocument from '../../../demo/components/MyDocument';
 import Image from 'next/image';
 import { useClients, useClientsForReports } from '../../../demo/hook/DataFetcher';
-import { calculateDateDifference } from '../../../demo/lib/date';
+import { calculateDateDifference, convertDateFormat } from '../../../demo/lib/date';
 import { useSearchParams } from 'next/navigation';
 
 const ReportPage = () => {
@@ -33,9 +33,10 @@ const ReportPage = () => {
     );
   }
   
+  
 
-   const startDate=searchParams.get('start_date')
-   const endDate=searchParams.get('end_date')
+   const startDate=convertDateFormat(searchParams.get('start_date'))
+   const endDate=convertDateFormat(searchParams.get('end_date'))
    let start_date=''
    let end_date=''
 
@@ -107,6 +108,7 @@ const ReportPage = () => {
 
   return (
     <div style={styles.container}>
+      
       <div style={styles.titleContainer}>
         <div style={styles.logoContainer}>
           <Image

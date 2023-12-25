@@ -16,18 +16,20 @@ export async function GET(request: Request) {
 
   await initAdmin();
  
-  const clients:any =await loadLastDayClients()
+  const clients:any =await loadLastWeekClients()
   const emails:any =await loadReportEmails()
   const totalPayments:any = clients.reduce((totalPayments:number, client:any) => totalPayments + client.payment, 0);
 
-  //to: emails,
-  //to:['abdallahantony55.aa@gmail.com'],
+      // to: emails,
+      //to:to: ['abdallahantony55.aa@gmail.com'],
       try {
         const data = await resend.emails.send({
           from: 'Joshmal Hotels <promo@jasmai.design>',
-          to:emails,
+          to: emails,
           subject: 'Sales Report',
-          react: EmailTemplate({ totalPayments,numberOfClients:clients.length, whenDay:'Yesterday' }),
+          react: EmailTemplate({ totalPayments,
+            numberOfClients:clients.length,
+            whenDay:'Last Week' }),
         });
     
         console.log("yesss")
@@ -42,31 +44,32 @@ export async function GET(request: Request) {
 }
 
 
-export const loadLastDayClients = async () => {
+export const loadLastWeekClients = async () => {
   const firestore = getFirestore();
-  const productRef = await firestore.collection( 'products').get();
+  const productRef = await firestore.collection('products').get();
 
-  const products:any = [];
- 
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
+  const products: any = [];
+
+  const lastWeek = new Date();
+  lastWeek.setDate(lastWeek.getDate() - 7); // Change to -6 if you want the last 6 days
 
   const querySnapshot = productRef.docs;
   querySnapshot.forEach((doc) => {
     const productData = doc.data();
     const checkInDate = productData.check_in?.toDate(); // Assuming check_in is a Firestore Timestamp
 
-    // Check if check_in is yesterday
-    if (checkInDate && checkInDate.toDateString() === yesterday.toDateString()) {
+    // Check if check_in is within the last week
+    if (checkInDate && checkInDate >= lastWeek) {
       products.push({
         id: doc.id,
-        ...productData
+        ...productData,
       });
     }
   });
 
   return products;
 };
+
 
 export const loadReportEmails = async () => {
   const firestore = getFirestore();

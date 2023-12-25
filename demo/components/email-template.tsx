@@ -5,7 +5,7 @@ interface EmailTemplateProps {
   numberOfClients: number;
 }
 
-const EmailTemplate: React.FC<EmailTemplateProps> = ({ totalPayments, numberOfClients }) => {
+const EmailTemplate: React.FC<EmailTemplateProps> = ({ totalPayments, numberOfClients,whenDay }) => {
   const formattedTotalPayments = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'TZS',
@@ -14,7 +14,7 @@ const EmailTemplate: React.FC<EmailTemplateProps> = ({ totalPayments, numberOfCl
   return (
     <div style={containerStyle}>
       <h1 style={titleStyle}>Joshmal Hotels Sales Report</h1>
-      <p style={reportStyle}>Yesterday's Report:</p>
+      <p style={reportStyle}>{whenDay}'s Report:</p>
       <p style={figureStyle}>{`Sales: ${formattedTotalPayments}`}</p>
       <p style={figureStyle}>{`Clients: ${numberOfClients}`}</p>
       <a style={buttonStyle} href="https://joshmal.jasmai.design/pages/products">

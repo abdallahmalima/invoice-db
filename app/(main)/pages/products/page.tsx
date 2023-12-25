@@ -34,6 +34,8 @@ import { UserAuth } from '../../../../demo/components/context/AuthContext';
 import ReactPDF, { PDFDownloadLink } from '@react-pdf/renderer';
 import MyDocument from '../../../../demo/components/MyDocument';
 import { useRouter } from 'next/navigation';
+import { getCheckInDateRange } from '../../../../demo/lib/date';
+import { setConstantValue } from 'typescript';
 
 
 
@@ -60,8 +62,6 @@ const Product = () => {
     const [selectedProducts, setSelectedProducts] = useState<Demo.Product[]>([]);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
     const toast = useRef<Toast>(null);
     const dt = useRef<DataTable<Demo.Product[]>>(null);
     const fileUploadRef = useRef<FileUpload>(null);
@@ -76,8 +76,37 @@ const Product = () => {
     const [isLoadingRoom, setIsLoadingRoom, rooms, setRooms] = useRooms()
 
    const router=useRouter()
-   
 
+
+   const [startDate, setStartDate] = useState('');
+   const [endDate, setEndDate] = useState('');
+   const [calenderChangedByUser, setCalenderChangedByUser] = useState(false);
+   const { lowestCheckIn, highestCheckIn } = getCheckInDateRange(products);
+ 
+   
+   useEffect(()=>{
+
+    if(lowestCheckIn && highestCheckIn && !calenderChangedByUser){
+        setStartDate(lowestCheckIn?.toLocaleDateString("en-US"))
+        setEndDate(highestCheckIn?.toLocaleDateString("en-US"))
+    }
+
+   },[lowestCheckIn, highestCheckIn])
+
+   useEffect(()=>{
+   
+    if(!startDate){
+        setStartDate(lowestCheckIn?.toLocaleDateString("en-US"))
+    }
+
+    if(!endDate){
+        setEndDate(highestCheckIn?.toLocaleDateString("en-US"))
+    }
+
+
+   },[startDate,endDate])
+   
+console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocaleDateString("en-US"))
     
 
 
@@ -156,8 +185,8 @@ const Product = () => {
     };
     const openPrint = () => {
        
-        const start_date=new Date(startDate).toLocaleDateString('en-US')
-        const end_date=new Date(endDate).toLocaleDateString('en-US')
+        const start_date=new Date(startDate).toLocaleDateString('sw-TZ')
+        const end_date=new Date(endDate).toLocaleDateString('sw-TZ')
         const url = `/reports?start_date=${start_date}&end_date=${end_date}`;
         window.open(url, '_blank');
     };
@@ -343,10 +372,17 @@ const Product = () => {
                 <div className="my-2 flex">
                 <Button icon="pi pi-print" severity="danger"  onClick={openPrint}/>
                 <div className='ml-3'>
-                <Calendar placeholder='Start Date' showIcon showButtonBar value={startDate} onChange={(e)=>setStartDate(e.target.value)} />
+                <Calendar maxDate={new Date(endDate)} dateFormat="dd/mm/yy"  placeholder='Start Date' showIcon showButtonBar value={startDate} onChange={(e)=>{
+                    console.log(e.target.value)
+                    setCalenderChangedByUser(true)
+                    setStartDate(e.target.value)
+                    }} />
                 </div>
                 <div className='ml-3'>
-                <Calendar placeholder='End Date' showIcon showButtonBar value={endDate} onChange={(e)=>setEndDate(e.target.value)} />
+                <Calendar minDate={new Date(startDate)} dateFormat="dd/mm/yy" placeholder='End Date' showIcon showButtonBar value={endDate} onChange={(e)=>{
+                   setCalenderChangedByUser(true)
+                   setEndDate(e.target.value)
+                    }} />
                 </div>
                 </div>
             </React.Fragment>
@@ -692,12 +728,12 @@ const Product = () => {
                         </div>
                         <div className="field">
                             <label htmlFor="check_in">Check In:</label>
-                            <Calendar placeholder='Enter CheckIn Date' showIcon showButtonBar value={product.check_in} onChange={(e) => onInputChange(e, 'check_in')} required className={classNames({ 'p-invalid': submitted && !product.check_in })} />
+                            <Calendar maxDate={new Date(product.check_out)} dateFormat="dd/mm/yy" placeholder='Enter CheckIn Date' showIcon showButtonBar value={product.check_in} onChange={(e) => onInputChange(e, 'check_in')} required className={classNames({ 'p-invalid': submitted && !product.check_in })} />
                             {submitted && !product.check_in && <small className="p-invalid">Check In: is required.</small>}
                         </div>
                         <div className="field">
                             <label htmlFor="check_out">Check Out:</label>
-                            <Calendar placeholder='Enter CheckOut Date' showIcon showButtonBar value={product.check_out} onChange={(e) => onInputChange(e, 'check_out')} required className={classNames({ 'p-invalid': submitted && !product.check_out })} />
+                            <Calendar minDate={new Date(product.check_in)} dateFormat="dd/mm/yy" placeholder='Enter CheckOut Date' showIcon showButtonBar value={product.check_out} onChange={(e) => onInputChange(e, 'check_out')} required className={classNames({ 'p-invalid': submitted && !product.check_out })} />
                             {submitted && !product.check_out && <small className="p-invalid">Check Out: is required.</small>}
                         </div>
 

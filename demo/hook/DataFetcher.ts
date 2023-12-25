@@ -1,4 +1,4 @@
-import { collection, limit, onSnapshot, query, where } from "firebase/firestore";
+import { collection, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { FIRESTORE_DB } from "../../firebase.config";
 import { Demo } from "../../types/demo";
@@ -16,7 +16,8 @@ export const  useClients=()=>{
     const loadProducts=()=>{
         setIsLoading(true)
         const productRef=collection(FIRESTORE_DB,'products')
-        const subscriber=onSnapshot(productRef,{
+        const q=query(productRef,orderBy("createdAt", "desc"))
+        const subscriber=onSnapshot(q,{
             next:(snapshot)=>{
               const products:any=[];
               snapshot.docs.forEach((doc)=>{
@@ -60,46 +61,50 @@ export const  useClientsForReports=(start_date,end_date)=>{
         return ()=>{unsubscribe()}
   }, []);
 
-  const loadProducts=()=>{
-      setIsLoading(true)
-      const productRef=collection(FIRESTORE_DB,'products')
-      console.log(start_date,end_date)
-      const date=new Date(end_date) 
-      const my_end_date=date.setDate(date.getDate()+1)
-
-      let q = query(productRef);
-
-      if (start_date) {
-        q=query(productRef,where('check_in', '>=', new Date(start_date)));
-      }
-      
-      if (my_end_date) {
-        q=query(productRef,where('check_in', '<=', new Date(my_end_date)));
-      }
-      const subscriber=onSnapshot(q,{
-          next:(snapshot)=>{
-            const products:any=[];
-            snapshot.docs.forEach((doc)=>{
-              const check_in=doc.data().check_in?.toDate()
-              const check_out=doc.data().check_out?.toDate()
-              const createdAt=doc.data().createdAt?.toDate()
-              products.push({
-                id:doc.id,
-                ...doc.data(),
-                check_in,
-                check_out,
-                createdAt,
-              })
-              
-            })
-            console.log(products)
-            setIsLoading(false)
-              setProducts(products)
-          }
-        })
-
-        return subscriber
-  }
+  const loadProducts = () => {
+    setIsLoading(true);
+    const productRef = collection(FIRESTORE_DB, 'products');
+    console.log(start_date, end_date);
+  
+    let q = query(productRef);
+  
+    if (start_date) {
+      q = query(q, where('check_in', '>=', new Date(start_date)));
+    }
+  
+    if (end_date) {
+      // Adjust end_date to include the full day
+      const date = new Date(end_date);
+      date.setDate(date.getDate() + 1);
+  
+      q = query(q, where('check_in', '<=', date));
+    }
+  
+    const subscriber = onSnapshot(q, {
+      next: (snapshot) => {
+        const products = [];
+        snapshot.docs.forEach((doc) => {
+          const check_in = doc.data().check_in?.toDate();
+          const check_out = doc.data().check_out?.toDate();
+          const createdAt = doc.data().createdAt?.toDate();
+          products.push({
+            id: doc.id,
+            ...doc.data(),
+            check_in,
+            check_out,
+            createdAt,
+          });
+        });
+  
+        console.log(products);
+        setIsLoading(false);
+        setProducts(products);
+      },
+    });
+  
+    return subscriber;
+  };
+  
 
   return [
           isLoading,
