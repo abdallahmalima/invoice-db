@@ -7,6 +7,8 @@ import Image from 'next/image';
 import { useClients, useClientsForReports } from '../../../demo/hook/DataFetcher';
 import { calculateDateDifference, convertDateFormat } from '../../../demo/lib/date';
 import { useSearchParams } from 'next/navigation';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { capitalizeFirstLetter } from '../../../demo/lib/strings';
 
 const ReportPage = () => {
  
@@ -57,9 +59,7 @@ const ReportPage = () => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  function capitalizeFirstLetter(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  }
+ 
 
    const startDateSW=new Date(start_date).toLocaleDateString('sw-TZ')
    const endDateSW=new Date(end_date).toLocaleDateString('sw-TZ')
@@ -104,6 +104,27 @@ const ReportPage = () => {
    }
    if(isValidDate(endDate)){
     reportTitle+= ` to ${reportEndDate}`
+   }
+
+   if(isLoading){
+    return (
+    <div style={styles.container}>
+       <div style={styles.titleSubtitleContainer}>
+         <h1 style={styles.title}>Loading Report...</h1>
+         <ProgressSpinner />
+       </div>
+    </div>
+    )
+  }
+
+   if(!isLoading && clientsData.length==0){
+     return (
+     <div style={styles.container}>
+        <div style={styles.titleSubtitleContainer}>
+          <h1 style={styles.title}>No Report Found</h1>
+        </div>
+     </div>
+     )
    }
 
   return (

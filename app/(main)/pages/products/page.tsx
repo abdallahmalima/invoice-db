@@ -36,6 +36,7 @@ import MyDocument from '../../../../demo/components/MyDocument';
 import { useRouter } from 'next/navigation';
 import { getCheckInDateRange } from '../../../../demo/lib/date';
 import { setConstantValue } from 'typescript';
+import { capitalizeFirstLetter } from '../../../../demo/lib/strings';
 
 
 
@@ -415,7 +416,7 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
         return (
             <>
                 <span className="p-column-title">Full Name</span>
-                {rowData.f_name + " " + rowData.l_name}
+                {capitalizeFirstLetter(rowData.f_name) + " " + capitalizeFirstLetter(rowData.l_name)}
             </>
         );
     };
@@ -591,7 +592,7 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
     const imageSkeletonBodyTemplate = (rowData: Demo.Product) => {
         return (
             <>
-                <span className="p-column-title">Name</span>
+                <span className="p-column-title">Full Name</span>
                 <Skeleton width="7rem" height="4rem"></Skeleton>
             </>
         );
@@ -613,7 +614,7 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
     const descriptionSkeletonBodyTemplate = (rowData: Demo.Post) => {
         return (
             <>
-                <span className="p-column-title">Service</span>
+                <span className="p-column-title">Check In</span>
                 <div className="flex">
                     <div style={{ flex: '1' }}>
                         <Skeleton width="100%" className="mb-2"></Skeleton>
@@ -627,7 +628,7 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
     const priceSkeletonBodyTemplate = (rowData: Demo.Post) => {
         return (
             <>
-                <span className="p-column-title">Street</span>
+                <span className="p-column-title">Payment</span>
                 <div className="flex">
                     <div style={{ flex: '1' }}>
                         <Skeleton width="75%"></Skeleton>
@@ -661,10 +662,10 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
                         value={[{}, {}, {}, {}, {}, {}, {}, {}, {}]}
                     >
                         <Column selectionMode="multiple" headerStyle={{ width: '4rem' }}></Column>
-                        <Column header="Name" body={imageSkeletonBodyTemplate}></Column>
-                        <Column field="title" header="phone" sortable body={titleSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
-                        <Column field="description" header="service" sortable body={descriptionSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
-                        <Column field="price" header="street" sortable body={priceSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
+                        <Column header="Client's Name" body={imageSkeletonBodyTemplate}></Column>
+                        <Column field="title" header="Phone Number" sortable body={titleSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
+                        <Column field="description" header="Room no." sortable body={descriptionSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
+                        <Column field="price" header="Payment" sortable body={priceSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
                         <Column body={actionSkeletonBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
                     </DataTable>}
 

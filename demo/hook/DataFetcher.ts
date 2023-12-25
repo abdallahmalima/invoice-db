@@ -2,6 +2,8 @@ import { collection, limit, onSnapshot, orderBy, query, where } from "firebase/f
 import { useEffect, useState } from "react";
 import { FIRESTORE_DB } from "../../firebase.config";
 import { Demo } from "../../types/demo";
+import { ProgressSpinner } from 'primereact/progressspinner';
+        
 
 export const  useClients=()=>{
     const [isLoading,setIsLoading]=useState(false)
@@ -52,13 +54,15 @@ export const  useClients=()=>{
 }
 
 export const  useClientsForReports=(start_date,end_date)=>{
-  const [isLoading,setIsLoading]=useState(false)
+  const [isLoading,setIsLoading]=useState(true)
   const [products, setProducts] = useState<Demo.Product[]>([]);
 
   useEffect(() => {
       const unsubscribe=loadProducts()
 
-        return ()=>{unsubscribe()}
+        return ()=>{
+          unsubscribe()
+        }
   }, []);
 
   const loadProducts = () => {
@@ -79,7 +83,8 @@ export const  useClientsForReports=(start_date,end_date)=>{
   
       q = query(q, where('check_in', '<=', date));
     }
-  
+    q = query(q, orderBy('check_in'));
+    
     const subscriber = onSnapshot(q, {
       next: (snapshot) => {
         const products = [];
