@@ -14,6 +14,14 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function GET(request: Request) {
 
+  const today = new Date();
+
+// Check if today is Monday (1 corresponds to Monday)
+if (today.getDay() !== 1) {
+  
+  return new Response("Today is Not Monday!")
+}
+
   await initAdmin();
  
   const clients:any =await loadLastWeekClients()
@@ -21,11 +29,11 @@ export async function GET(request: Request) {
   const totalPayments:any = clients.reduce((totalPayments:number, client:any) => totalPayments + client.payment, 0);
 
       // to: emails,
-      //to:to: ['abdallahantony55.aa@gmail.com'],
+      //to: ['abdallahantony55.aa@gmail.com'],
       try {
         const data = await resend.emails.send({
           from: 'Joshmal Hotels <promo@jasmai.design>',
-          to: emails,
+          to: ['abdallahantony55.aa@gmail.com'],
           subject: 'Sales Report',
           react: EmailTemplate({ totalPayments,
             numberOfClients:clients.length,
