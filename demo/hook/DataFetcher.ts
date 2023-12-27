@@ -79,7 +79,7 @@ export const  useClientsForReports=(start_date,end_date)=>{
     if (end_date) {
       // Adjust end_date to include the full day
       const date = new Date(end_date);
-      date.setDate(date.getDate() + 1);
+      date.setDate(date.getDate() + 0);
   
       q = query(q, where('check_in', '<=', date));
     }

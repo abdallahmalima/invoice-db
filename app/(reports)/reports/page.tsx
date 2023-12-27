@@ -9,6 +9,7 @@ import { calculateDateDifference, convertDateFormat } from '../../../demo/lib/da
 import { useSearchParams } from 'next/navigation';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { capitalizeFirstLetter } from '../../../demo/lib/strings';
+import { formatNumberWithCommas } from '../../../demo/lib/currency';
 
 const ReportPage = () => {
  
@@ -55,9 +56,7 @@ const ReportPage = () => {
    console.log(start_date,end_date)
  
 
-  function formatNumberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
+
 
  
 
