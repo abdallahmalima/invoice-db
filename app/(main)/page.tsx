@@ -251,7 +251,7 @@ const updatedLineData: ChartData = {
                             <i className="pi pi-shopping-cart text-blue-500 text-xl" />
                         </div>
                     </div>
-                    <span className="text-green-500 font-medium">Today's </span>
+                    <span className="text-green-500 font-medium">{"Today's"} </span>
                     <span className="text-500"> Total Revenue</span>
                 </div>
             </div>
@@ -266,7 +266,7 @@ const updatedLineData: ChartData = {
                             <i className="pi pi-shopping-cart text-blue-500 text-xl" />
                         </div>
                     </div>
-                    <span className="text-green-500 font-medium">This Week's</span>
+                    <span className="text-green-500 font-medium">{"This Week's"}</span>
                     <span className="text-500">Total Revenue</span>
                 </div>
             </div>
@@ -281,7 +281,7 @@ const updatedLineData: ChartData = {
                             <i className="pi pi-shopping-cart text-blue-500 text-xl" />
                         </div>
                     </div>
-                    <span className="text-green-500 font-medium">This Month's </span>
+                    <span className="text-green-500 font-medium">{"This Month's"} </span>
                     <span className="text-500"> Total Revenue</span>
                 </div>
             </div>
@@ -296,7 +296,7 @@ const updatedLineData: ChartData = {
                             <i className="pi pi-shopping-cart text-blue-500 text-xl" />
                         </div>
                     </div>
-                    <span className="text-green-500 font-medium">This Year's </span>
+                    <span className="text-green-500 font-medium">{"This Year's"} </span>
                     <span className="text-500"> Total Revenue</span>
                 </div>
             </div>
