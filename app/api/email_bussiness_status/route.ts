@@ -17,11 +17,6 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function GET(request: Request) {
 
-//   const today = new Date();
-// // Check if today is Monday (1 corresponds to Monday)
-// if (today.getDay() !== 1) {
-//   return new Response("Today is Not Monday!")
-// }
 
   await initAdmin();
  
@@ -53,7 +48,7 @@ const positivePercentageChange = Math.abs(percentageChange);
       try {
         const data = await resend.emails.send({
           from: 'Joshmal Hotels <promo@jasmai.design>',
-          to: ['abdallahantony55.aa@gmail.com'],
+          to: emails,
           subject: 'Alert: Business Performance Update 🚀🎉💼',
           react: EmailTemplateBussinessStatus({
             salesDifference,
