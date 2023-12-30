@@ -689,10 +689,10 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
                         responsiveLayout="scroll"
                     >
                         <Column selectionMode="multiple" headerStyle={{ width: '4rem' }}></Column>
-                        <Column field="name" header="Client's Name" sortable body={nameBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
+                        <Column field="f_name" header="Client's Name" sortable body={nameBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
                         <Column field="phone" header="Phone Number" body={phoneBodyTemplate} sortable></Column>
-                        <Column field="service" header="Room No." body={serviceBodyTemplate} sortable></Column>
-                        <Column field="street" header="Payment" body={streetBodyTemplate} sortable></Column>
+                        <Column field="room_no" header="Room No." body={serviceBodyTemplate} sortable></Column>
+                        <Column field="payment" header="Payment" body={streetBodyTemplate} sortable></Column>
                         <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
                     </DataTable>}
 

@@ -17,8 +17,12 @@ export const  useClients=()=>{
 
     const loadProducts=()=>{
         setIsLoading(true)
-        const productRef=collection(FIRESTORE_DB,'products')
-        const q=query(productRef,orderBy("createdAt", "desc"))
+        const productRef = collection(FIRESTORE_DB, 'products');
+        const q = query(
+          productRef,
+          orderBy('createdAt', 'desc'),
+        );
+      
         const subscriber=onSnapshot(q,{
             next:(snapshot)=>{
               const products:any=[];
@@ -35,7 +39,7 @@ export const  useClients=()=>{
                 })
                 
               })
-              console.log(products)
+              
               setIsLoading(false)
                 setProducts(products)
             }
