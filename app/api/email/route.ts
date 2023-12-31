@@ -49,7 +49,7 @@ export const loadLastDayClients = async () => {
   const products:any = [];
  
   const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setDate(yesterday.getDate() - 2);
 
   const querySnapshot = productRef.docs;
   querySnapshot.forEach((doc) => {
