@@ -5,7 +5,7 @@ import { FIRESTORE_DB } from "../../../firebase.config";
 import { initAdmin } from "../../../firebaseAdmin";
 import { getFirestore } from "firebase-admin/firestore";
 import EmailTemplateBussinessStatus from "../../../demo/components/email-template-bussiness-status";
-import { calculateSalesDifference, getTotalSalesLastWeekDataset, getTotalSalesThisWeekDataset } from "../../../demo/lib/calc";
+import { calculateSalesDifference, getTotalSalesLastWeekDataset, getTotalSalesLastWeekDatasetApi, getTotalSalesThisWeekDataset, getTotalSalesThisWeekDatasetApi } from "../../../demo/lib/calc";
 import { useClients } from "../../../demo/hook/DataFetcher";
 
 export const maxDuration = 10; // This function can run for a maximum of 5 seconds
@@ -23,8 +23,8 @@ export async function GET(request: Request) {
   const products:any =await allClients()
   const emails:any =await loadReportEmails()
  
- const weeklyPaymentsDataset= getTotalSalesLastWeekDataset(products)
- const thisweeklyPaymentsDataset=getTotalSalesThisWeekDataset(products)
+ const weeklyPaymentsDataset= getTotalSalesLastWeekDatasetApi(products)
+ const thisweeklyPaymentsDataset=getTotalSalesThisWeekDatasetApi(products)
 
  const {
   salesDifference,
@@ -48,7 +48,7 @@ const positivePercentageChange = Math.abs(percentageChange);
       try {
         const data = await resend.emails.send({
           from: 'Joshmal Hotels <promo@jasmai.design>',
-          to: emails,
+          to: ['abdallahantony55.aa@gmail.com'],
           subject: 'Alert: Business Performance Update 🚀🎉💼',
           react: EmailTemplateBussinessStatus({
             salesDifference,

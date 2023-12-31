@@ -121,10 +121,68 @@ return totalSales
 
   export function getTotalSalesLastWeekDataset(products) {
     const { lastWeekMonday, lastWeekSunday } = getLastWeekMondayAndSunday();
-
+    
+    
   const filtedProducts= products
     .filter(payment => {
       const paymentDate = payment.check_in;
+     
+     
+      const paymentYear = paymentDate.getFullYear();
+      const paymentMonth = paymentDate.getMonth();
+      const paymentDay = paymentDate.getDate();
+
+      const lastWeekMondayYear = lastWeekMonday.getFullYear();
+      const lastWeekMondayMonth = lastWeekMonday.getMonth();
+      const lastWeekMondayDay = lastWeekMonday.getDate();
+
+      const lastWeekSundayYear = lastWeekSunday.getFullYear();
+      const lastWeekSundayMonth = lastWeekSunday.getMonth();
+      const lastWeekSundayDay = lastWeekSunday.getDate();
+
+      return (
+        (paymentYear === lastWeekMondayYear && paymentMonth === lastWeekMondayMonth) && (paymentDay >= lastWeekMondayDay && paymentDay <= lastWeekSundayDay)
+       
+      );
+    }).map(product=>{
+        const days=calculateDateDifference(product.check_in,product.check_out);
+        return {
+            check_in:product.check_in,
+            payment:product.payment*days
+        }
+      })
+    
+    
+
+ const dailyTotals = [];
+  // Loop through each day from lastWeekMonday to lastWeekSunday
+  let currentDate = new Date(lastWeekMonday);
+  while (currentDate <= lastWeekSunday) {
+    const total = filtedProducts
+      .filter( product  => {
+        return product.check_in.getDate() === currentDate.getDate();
+      })
+      .reduce((sum, { payment }) => sum + payment, 0);
+
+    dailyTotals.push(total);
+    
+    // Move to the next day
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dailyTotals;
+  }
+
+  export function getTotalSalesLastWeekDatasetApi(products) {
+    const { lastWeekMonday, lastWeekSunday } = getLastWeekMondayAndSunday();
+    lastWeekMonday.setHours(lastWeekMonday.getHours() + 3);
+    lastWeekSunday.setHours(lastWeekSunday.getHours() + 3);
+    
+  const filtedProducts= products
+    .filter(payment => {
+      const paymentDate = payment.check_in;
+      paymentDate.setHours(paymentDate.getHours() + 3);
+     
       const paymentYear = paymentDate.getFullYear();
       const paymentMonth = paymentDate.getMonth();
       const paymentDay = paymentDate.getDate();
@@ -190,9 +248,64 @@ return totalSales
 
   export function getTotalSalesThisWeekDataset(products) {
     const {  currentWeekMonday, currentWeekSunday } = getCurrentWeekMondayAndSunday();
+    
     const filtedProducts= products
     .filter(payment => {
       const paymentDate = payment.check_in;
+      const paymentYear = paymentDate.getFullYear();
+      const paymentMonth = paymentDate.getMonth();
+      const paymentDay = paymentDate.getDate();
+
+      const lastWeekMondayYear =  currentWeekMonday.getFullYear();
+      const lastWeekMondayMonth =  currentWeekMonday.getMonth();
+      const lastWeekMondayDay =  currentWeekMonday.getDate();
+
+      const lastWeekSundayYear =  currentWeekSunday.getFullYear();
+      const lastWeekSundayMonth = currentWeekSunday.getMonth();
+      const lastWeekSundayDay = currentWeekSunday.getDate();
+
+      return (
+        (paymentYear === lastWeekMondayYear && paymentMonth === lastWeekMondayMonth) && (paymentDay >= lastWeekMondayDay && paymentDay <= lastWeekSundayDay)
+       
+      );
+    }).map(product=>{
+        const days=calculateDateDifference(product.check_in,product.check_out);
+        return {
+            check_in:product.check_in,
+            payment:product.payment*days
+        }
+      })
+    
+    
+
+ const dailyTotals = [];
+  // Loop through each day from lastWeekMonday to lastWeekSunday
+  let currentDate = new Date(currentWeekMonday);
+  while (currentDate <=  currentWeekSunday) {
+    const total = filtedProducts
+      .filter( product  => {
+        return product.check_in.getDate() === currentDate.getDate();
+      })
+      .reduce((sum, { payment }) => sum + payment, 0);
+
+    dailyTotals.push(total);
+    
+    // Move to the next day
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dailyTotals;
+
+  }
+
+  export function getTotalSalesThisWeekDatasetApi(products) {
+    const {  currentWeekMonday, currentWeekSunday } = getCurrentWeekMondayAndSunday();
+    currentWeekMonday.setHours(currentWeekMonday.getHours() + 3);
+    currentWeekSunday.setHours(currentWeekSunday.getHours() + 3);
+    const filtedProducts= products
+    .filter(payment => {
+      const paymentDate = payment.check_in;
+      paymentDate.setHours(paymentDate.getHours() + 3);
       const paymentYear = paymentDate.getFullYear();
       const paymentMonth = paymentDate.getMonth();
       const paymentDay = paymentDate.getDate();

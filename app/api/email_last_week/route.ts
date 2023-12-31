@@ -17,9 +17,9 @@ export async function GET(request: Request) {
 
   const today = new Date();
 // Check if today is Monday (1 corresponds to Monday)
-// if (today.getDay() !== 1) {
-//   return new Response("Today is Not Monday!")
-// }
+if (today.getDay() !== 1) {
+  return new Response("Today is Not Monday!")
+}
 
   await initAdmin();
  
@@ -80,7 +80,7 @@ export const loadLastWeekClients = async () => {
 
   return products .filter(payment => {
     const paymentDate = payment.check_in;
-    
+
     paymentDate.setHours(paymentDate.getHours() + 3);
 
     const paymentYear = paymentDate.getFullYear();
