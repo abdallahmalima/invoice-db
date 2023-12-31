@@ -7,6 +7,7 @@ import { getFirestore } from "firebase-admin/firestore";
 import EmailTemplateBussinessStatus from "../../../demo/components/email-template-bussiness-status";
 import { calculateSalesDifference, getTotalSalesLastWeekDataset, getTotalSalesLastWeekDatasetApi, getTotalSalesThisWeekDataset, getTotalSalesThisWeekDatasetApi } from "../../../demo/lib/calc";
 import { useClients } from "../../../demo/hook/DataFetcher";
+import { getReportEmails } from "../../../demo/lib/env";
 
 export const maxDuration = 10; // This function can run for a maximum of 5 seconds
 export const dynamic = 'force-dynamic';
@@ -43,12 +44,12 @@ const positivePercentageChange = Math.abs(percentageChange);
 
 
 
-      // to: emails,
-      //to: ['abdallahantony55.aa@gmail.com'],
+   let reportEmails=getReportEmails(emails)
+
       try {
         const data = await resend.emails.send({
           from: 'Joshmal Hotels <promo@jasmai.design>',
-          to: emails,
+          to: reportEmails,
           subject: 'Alert: Business Performance Update 🚀🎉💼',
           react: EmailTemplateBussinessStatus({
             salesDifference,

@@ -4,6 +4,7 @@ import { Resend } from 'resend';
 import { FIRESTORE_DB } from "../../../firebase.config";
 import { initAdmin } from "../../../firebaseAdmin";
 import { getFirestore } from "firebase-admin/firestore";
+import { getReportEmails, isDevelopment, isLocalhost } from "../../../demo/lib/env";
 
 export const maxDuration = 10; // This function can run for a maximum of 5 seconds
 export const dynamic = 'force-dynamic';
@@ -20,12 +21,12 @@ export async function GET(request: Request) {
   const emails:any =await loadReportEmails()
   const totalPayments:any = clients.reduce((totalPayments:number, client:any) => totalPayments + client.payment, 0);
 
-  //to: emails,
-  //to:['abdallahantony55.aa@gmail.com'],
+  let reportEmails=getReportEmails(emails)
+
       try {
         const data = await resend.emails.send({
           from: 'Joshmal Hotels <promo@jasmai.design>',
-          to:emails,
+          to:reportEmails,
           subject: 'Sales Report',
           react: EmailTemplate({ totalPayments,numberOfClients:clients.length, whenDay:'Yesterday' }),
         });
