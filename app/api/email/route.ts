@@ -36,10 +36,8 @@ export async function GET(request: Request) {
       }
 
   
-  const myDate=new Date()
-  myDate.setHours(myDate.getHours() +3);
- console.log()
-  return new Response(myDate.getHours().toString())
+  
+  return new Response("Done")
 }
 
 
