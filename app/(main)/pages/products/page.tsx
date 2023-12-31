@@ -560,7 +560,7 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
 
           <div className={hasData && `flex space-x-4`}>
             <Button label="Cancel" icon="pi pi-times" text onClick={hideDialog} />
-            {product.createdBy==FIREBASE_AUTH?.currentUser?.uid || !hasData ?  <Button
+            {product.createdBy==FIREBASE_AUTH?.currentUser?.uid || !product?.id ?  <Button
               label={!isLoadingSubmit ? `Save` : <LoadingSpinner />}
               icon={!isLoadingSubmit && `pi pi-check`}
               text

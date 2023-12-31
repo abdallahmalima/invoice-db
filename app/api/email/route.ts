@@ -4,7 +4,8 @@ import { Resend } from 'resend';
 import { FIRESTORE_DB } from "../../../firebase.config";
 import { initAdmin } from "../../../firebaseAdmin";
 import { getFirestore } from "firebase-admin/firestore";
-import { getReportEmails, isDevelopment, isLocalhost } from "../../../demo/lib/env";
+import { getReportEmails, isDevelopment, isLocalhost, isProduction } from "../../../demo/lib/env";
+import { calculateDateDifference } from "../../../demo/lib/date";
 
 export const maxDuration = 10; // This function can run for a maximum of 5 seconds
 export const dynamic = 'force-dynamic';
@@ -50,7 +51,12 @@ export const loadLastDayClients = async () => {
  
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-  yesterday.setHours(yesterday.getHours() + 3);
+  
+  if(isProduction()|| isDevelopment()){
+    yesterday.setHours(yesterday.getHours() + 3);
+  }
+  
+
   const querySnapshot = productRef.docs;
   querySnapshot.forEach((doc) => {
    
@@ -70,13 +76,22 @@ export const loadLastDayClients = async () => {
 
   return products .filter(payment => {
     const paymentDate = payment.check_in;
-    paymentDate.setHours(paymentDate.getHours() + 3);
+
+    if(isProduction()|| isDevelopment()){
+      paymentDate.setHours(paymentDate.getHours() + 3);
+    }
     return (
       paymentDate.getFullYear() === yesterday.getFullYear() &&
       paymentDate.getMonth() === yesterday.getMonth()       &&
       paymentDate.getDate() === yesterday.getDate()
     );
-  });
+  }).map(product=>{
+    const days=calculateDateDifference(product.check_in,product.check_out);
+    return {
+        check_in:product.check_in,
+        payment:product.payment*days
+    }
+  })
 };
 
 export const loadReportEmails = async () => {
