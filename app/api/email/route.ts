@@ -36,9 +36,9 @@ export async function GET(request: Request) {
       }
 
   
-  
- 
-  return new Response("done")
+  const myDate=new Date()
+ console.log()
+  return new Response(myDate.getTimezoneOffset().toString())
 }
 
 
@@ -49,7 +49,7 @@ export const loadLastDayClients = async () => {
   const products:any = [];
  
   const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 2);
+  yesterday.setDate(yesterday.getDate() - 1);
 
   const querySnapshot = productRef.docs;
   querySnapshot.forEach((doc) => {
