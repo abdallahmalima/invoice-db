@@ -57,12 +57,12 @@ export const loadLastDayClients = async () => {
     const checkInDate = productData.check_in?.toDate(); // Assuming check_in is a Firestore Timestamp
 
     // Check if check_in is yesterday
-    if (checkInDate && checkInDate.getDate()>= yesterday.getDate()) {
+  
       products.push({
         id: doc.id,
         ...productData
       });
-    }
+    
   });
 
   return products;
