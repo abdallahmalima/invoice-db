@@ -57,10 +57,7 @@ if (today.getDay() !== 1) {
 export const loadLastWeekClients = async () => {
   const { lastWeekMonday, lastWeekSunday } = getLastWeekMondayAndSunday();
 
-  if(isProduction()|| isDevelopment()){
-    lastWeekMonday.setHours(lastWeekMonday.getHours() + 3);
-    lastWeekSunday.setHours(lastWeekSunday.getHours() + 3);
-  }
+
   
 
   const firestore = getFirestore();
@@ -143,6 +140,10 @@ export const loadReportEmails = async () => {
 
 function getLastWeekMondayAndSunday() {
   const today = new Date();
+  if(isProduction()|| isDevelopment()){
+    today.setHours(today.getHours() + 3);
+  }
+
   const dayOfWeek = today.getDay(); // 0 is Sunday, 1 is Monday, etc.
 
   // Calculate the difference between the current day and Monday
