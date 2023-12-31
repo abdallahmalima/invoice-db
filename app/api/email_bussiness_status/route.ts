@@ -48,7 +48,7 @@ const positivePercentageChange = Math.abs(percentageChange);
       try {
         const data = await resend.emails.send({
           from: 'Joshmal Hotels <promo@jasmai.design>',
-          to: ['abdallahantony55.aa@gmail.com'],
+          to: emails,
           subject: 'Alert: Business Performance Update 🚀🎉💼',
           react: EmailTemplateBussinessStatus({
             salesDifference,
