@@ -35,10 +35,11 @@ export async function GET(request: Request) {
         console.log(error)
       }
 
-  
-  
- 
-  return new Response("done")
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+   
+   //return yesterday.toDateString();
+  return new Response(yesterday.toDateString())
 }
 
 
@@ -57,7 +58,7 @@ export const loadLastDayClients = async () => {
     const checkInDate = productData.check_in?.toDate(); // Assuming check_in is a Firestore Timestamp
 
     // Check if check_in is yesterday
-    if (checkInDate && checkInDate.toLocaleDateString('sw-TZ') === yesterday.toLocaleDateString('sw-TZ')) {
+    if (checkInDate && checkInDate.toDateString() === yesterday.toDateString()) {
       products.push({
         id: doc.id,
         ...productData
