@@ -231,9 +231,6 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
                 toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Client Updated', life: 3000 });
                 console.log(product.id)
 
-
-
-
             } else {
                 if (true) {
                     setIsLoadingSubmit(true)
@@ -252,6 +249,7 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
                         room_type:_product.room_type,
                         createdBy:FIREBASE_AUTH.currentUser?.uid,
                         createdAt: serverTimestamp(),
+                        
 
                     })
                     loadProducts()
@@ -510,7 +508,8 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
         return (
             <>
                 <Button icon="pi pi-pencil" rounded severity="success" className="mr-2" onClick={() => editProduct(rowData)} />
-                <Button icon="pi pi-trash" rounded severity="warning" onClick={() => confirmDeleteProduct(rowData)} />
+
+                {rowData.createdBy==FIREBASE_AUTH?.currentUser?.uid ?<Button icon="pi pi-trash" rounded severity="warning" onClick={() => confirmDeleteProduct(rowData)} />:null}
             </>
         );
     };
@@ -561,13 +560,13 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
 
           <div className={hasData && `flex space-x-4`}>
             <Button label="Cancel" icon="pi pi-times" text onClick={hideDialog} />
-            <Button
+            {product.createdBy==FIREBASE_AUTH?.currentUser?.uid || !hasData ?  <Button
               label={!isLoadingSubmit ? `Save` : <LoadingSpinner />}
               icon={!isLoadingSubmit && `pi pi-check`}
               text
               onClick={saveProduct}
               disabled={!isFormFilled() || isLoadingSubmit}
-            />
+            />:null}
           </div>
         </div>
         </>

@@ -25,7 +25,7 @@ export async function GET(request: Request) {
       try {
         const data = await resend.emails.send({
           from: 'Joshmal Hotels <promo@jasmai.design>',
-          to:emails,
+          to:['abdallahantony55.aa@gmail.com'],
           subject: 'Sales Report',
           react: EmailTemplate({ totalPayments,numberOfClients:clients.length, whenDay:'Yesterday' }),
         });
@@ -57,7 +57,7 @@ export const loadLastDayClients = async () => {
     const checkInDate = productData.check_in?.toDate(); // Assuming check_in is a Firestore Timestamp
 
     // Check if check_in is yesterday
-    if (checkInDate && checkInDate.toDateString() === yesterday.toDateString()) {
+    if (checkInDate && checkInDate.toLocaleDateString('sw-TZ') === yesterday.toLocaleDateString('sw-TZ')) {
       products.push({
         id: doc.id,
         ...productData
