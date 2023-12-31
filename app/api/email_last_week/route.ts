@@ -5,7 +5,7 @@ import { FIRESTORE_DB } from "../../../firebase.config";
 import { initAdmin } from "../../../firebaseAdmin";
 import { getFirestore } from "firebase-admin/firestore";
 import { calculateDateDifference } from "../../../demo/lib/date";
-import { getReportEmails } from "../../../demo/lib/env";
+import { getReportEmails, isDevelopment, isProduction } from "../../../demo/lib/env";
 
 export const maxDuration = 10; // This function can run for a maximum of 5 seconds
 export const dynamic = 'force-dynamic';
@@ -53,8 +53,12 @@ if (today.getDay() !== 1) {
 
 export const loadLastWeekClients = async () => {
   const { lastWeekMonday, lastWeekSunday } = getLastWeekMondayAndSunday();
-  lastWeekMonday.setHours(lastWeekMonday.getHours() + 3);
-  lastWeekSunday.setHours(lastWeekSunday.getHours() + 3);
+
+  if(isProduction()|| isDevelopment()){
+    lastWeekMonday.setHours(lastWeekMonday.getHours() + 3);
+    lastWeekSunday.setHours(lastWeekSunday.getHours() + 3);
+  }
+  
 
   const firestore = getFirestore();
   const productRef = await firestore.collection('products').get();
@@ -81,7 +85,11 @@ export const loadLastWeekClients = async () => {
   return products .filter(payment => {
     const paymentDate = payment.check_in;
 
-    paymentDate.setHours(paymentDate.getHours() + 3);
+    if(isProduction() || isDevelopment()){
+      paymentDate.setHours(paymentDate.getHours() + 3);
+    }
+
+    
 
     const paymentYear = paymentDate.getFullYear();
     const paymentMonth = paymentDate.getMonth();

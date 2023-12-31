@@ -80,6 +80,7 @@ export const loadLastDayClients = async () => {
     if(isProduction()|| isDevelopment()){
       paymentDate.setHours(paymentDate.getHours() + 3);
     }
+    
     return (
       paymentDate.getFullYear() === yesterday.getFullYear() &&
       paymentDate.getMonth() === yesterday.getMonth()       &&
