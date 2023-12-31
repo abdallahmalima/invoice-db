@@ -26,38 +26,42 @@ export function getTotalTodayPayments(products) {
   
 
   export function getTotalThisWeekPayments(products) {
-    const today = new Date();
-    const thisYear = today.getFullYear();
-    const thisMonth = today.getMonth();
-    const thisWeek = getWeekNumber(today);
-  
-    return products
-      .filter(payment => {
-        const paymentDate = payment.check_in;
-        return (
-          paymentDate.getFullYear() === thisYear &&
-          paymentDate.getMonth() === thisMonth &&
-          getWeekNumber(paymentDate) === thisWeek
-        );
-      })
-      .map(product=>{
+
+    const {  currentWeekMonday, currentWeekSunday } = getCurrentWeekMondayAndSunday();
+    const filtedProducts= products
+    .filter(payment => {
+      const paymentDate = payment.check_in;
+      const paymentYear = paymentDate.getFullYear();
+      const paymentMonth = paymentDate.getMonth();
+      const paymentDay = paymentDate.getDate();
+
+      const lastWeekMondayYear =  currentWeekMonday.getFullYear();
+      const lastWeekMondayMonth =  currentWeekMonday.getMonth();
+      const lastWeekMondayDay =  currentWeekMonday.getDate();
+
+      const lastWeekSundayYear =  currentWeekSunday.getFullYear();
+      const lastWeekSundayMonth = currentWeekSunday.getMonth();
+      const lastWeekSundayDay = currentWeekSunday.getDate();
+
+      return (
+        (paymentYear === lastWeekMondayYear && paymentMonth === lastWeekMondayMonth) && (paymentDay >= lastWeekMondayDay && paymentDay <= lastWeekSundayDay)
+       
+      );
+    }).map(product=>{
         const days=calculateDateDifference(product.check_in,product.check_out);
         return {
+            check_in:product.check_in,
             payment:product.payment*days
         }
       })
-      .reduce((total, payment) => total + payment.payment, 0);
-  }
-  
-  // Function to get the week number for a given date
-  function getWeekNumber(date) {
-    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-    const days = Math.floor((date - firstDayOfYear) / (24 * 60 * 60 * 1000));
-    const weekNumber = Math.ceil((days + firstDayOfYear.getDay() + 1) / 7);
-    return weekNumber;
-  }
-  
 
+const totalSales=filtedProducts.reduce((total, payment) => total + payment.payment, 0);
+
+return totalSales
+
+   
+   
+  }
 
   export function getTotalThisMonthPayments(products) {
     const today = new Date();
@@ -186,8 +190,7 @@ export function getTotalTodayPayments(products) {
 
   export function getTotalSalesThisWeekDataset(products) {
     const {  currentWeekMonday, currentWeekSunday } = getCurrentWeekMondayAndSunday();
-      console.log( currentWeekMonday, currentWeekSunday)
-  const filtedProducts= products
+    const filtedProducts= products
     .filter(payment => {
       const paymentDate = payment.check_in;
       const paymentYear = paymentDate.getFullYear();

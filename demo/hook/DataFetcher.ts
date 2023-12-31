@@ -57,6 +57,54 @@ export const  useClients=()=>{
           ]
 }
 
+export const  useUsers=()=>{
+  const [isLoading,setIsLoading]=useState(false)
+  const [products, setProducts] = useState<Demo.Product[]>([]);
+
+  useEffect(() => {
+      const unsubscribe=loadProducts()
+
+        return ()=>{unsubscribe()}
+  }, []);
+
+  const loadProducts=()=>{
+      setIsLoading(true)
+      const productRef = collection(FIRESTORE_DB, 'users');
+      const q = query(
+        productRef,
+        orderBy('createdAt', 'desc'),
+      );
+    
+      const subscriber=onSnapshot(q,{
+          next:(snapshot)=>{
+            const products:any=[];
+            snapshot.docs.forEach((doc)=>{
+              const createdAt=doc.data().createdAt?.toDate()
+              products.push({
+                id:doc.id,
+                ...doc.data(),
+                createdAt,
+              })
+              
+            })
+            
+              setIsLoading(false)
+              setProducts(products)
+          }
+        })
+
+        return subscriber
+  }
+
+  return [
+          isLoading,
+          setIsLoading,
+          products,
+          setProducts,
+          loadProducts
+        ]
+}
+
 export const  useClientsForReports=(start_date,end_date)=>{
   const [isLoading,setIsLoading]=useState(true)
   const [products, setProducts] = useState<Demo.Product[]>([]);
