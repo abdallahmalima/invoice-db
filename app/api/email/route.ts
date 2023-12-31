@@ -50,7 +50,7 @@ export const loadLastDayClients = async () => {
  
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-
+  yesterday.setHours(yesterday.getHours() + 3);
   const querySnapshot = productRef.docs;
   querySnapshot.forEach((doc) => {
    
@@ -70,6 +70,7 @@ export const loadLastDayClients = async () => {
 
   return products .filter(payment => {
     const paymentDate = payment.check_in;
+    paymentDate.setHours(paymentDate.getHours() + 3);
     return (
       paymentDate.getFullYear() === yesterday.getFullYear() &&
       paymentDate.getMonth() === yesterday.getMonth()       &&
