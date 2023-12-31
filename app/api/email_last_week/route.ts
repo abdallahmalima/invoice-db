@@ -17,6 +17,9 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function GET(request: Request) {
 
   const today = new Date();
+  if(isProduction()|| isDevelopment()){
+    today.setHours(today.getHours() + 3);
+  }
 // Check if today is Monday (1 corresponds to Monday)
 if (today.getDay() !== 1) {
   return new Response("Today is Not Monday!")
