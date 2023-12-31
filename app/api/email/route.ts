@@ -53,19 +53,29 @@ export const loadLastDayClients = async () => {
 
   const querySnapshot = productRef.docs;
   querySnapshot.forEach((doc) => {
-    const productData = doc.data();
-    const checkInDate = productData.check_in?.toDate(); // Assuming check_in is a Firestore Timestamp
-
-    // Check if check_in is yesterday
-  
-      products.push({
-        id: doc.id,
-        ...productData
-      });
+   
+    // Assuming check_in is a Firestore Timestamp
+    const check_in = doc.data().check_in?.toDate();
+    const check_out = doc.data().check_out?.toDate();
+    const createdAt = doc.data().createdAt?.toDate();
+    products.push({
+      id: doc.id,
+      ...doc.data(),
+      check_in,
+      check_out,
+      createdAt,
+    });
     
   });
 
-  return products;
+  return products .filter(payment => {
+    const paymentDate = payment.check_in;
+    return (
+      paymentDate.getFullYear() === yesterday.getFullYear() &&
+      paymentDate.getMonth() === yesterday.getMonth()       &&
+      paymentDate.getDate() === yesterday.getDate()
+    );
+  });
 };
 
 export const loadReportEmails = async () => {
