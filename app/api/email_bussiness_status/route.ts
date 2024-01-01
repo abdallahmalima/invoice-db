@@ -38,7 +38,7 @@ export async function GET(request: Request) {
 const positivePercentageChange = Math.abs(percentageChange);
 
   if (positivePercentageChange < 30) {
-     return new Response("Today is Not Monday!")
+     return new Response("Not greater that 30%")
    }
 
 
