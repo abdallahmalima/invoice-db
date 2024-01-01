@@ -36,7 +36,7 @@ export async function GET(request: Request) {
         console.log(error)
       }
 
-      //await markClientsAsReported(clients);
+      await markClientsAsReported(clients);
 
      const yesterday = new Date();
      yesterday.setDate(yesterday.getDate() - 1);
