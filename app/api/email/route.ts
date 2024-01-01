@@ -1,7 +1,6 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, updateDoc,writeBatch } from "firebase/firestore";
 import  EmailTemplate  from "../../../demo/components/email-template";
 import { Resend } from 'resend';
-import { FIRESTORE_DB } from "../../../firebase.config";
 import { initAdmin } from "../../../firebaseAdmin";
 import { getFirestore } from "firebase-admin/firestore";
 import { getReportEmails, isDevelopment, isLocalhost, isProduction } from "../../../demo/lib/env";
@@ -37,9 +36,38 @@ export async function GET(request: Request) {
         console.log(error)
       }
 
+      //await markClientsAsReported(clients);
+
+     const yesterday = new Date();
+     yesterday.setDate(yesterday.getDate() - 1);
   
-  
-  return new Response("Done")
+  if(isProduction()|| isDevelopment()){
+    console.log("Weeeeeeeeeeeeeeeeeeee",isDevelopment(),isProduction())
+    yesterday.setHours(yesterday.getHours() + 3);
+  }
+
+  return new Response(yesterday.getDate().toString())
+}
+
+
+
+async function markClientsAsReported(clients) {
+  const firestore = getFirestore();
+ 
+  const batch = firestore.batch();
+
+  clients.forEach((client) => {
+    const clientRef = firestore.doc(`products/${client.id}`);
+    batch.update(clientRef, { reported: true });
+  });
+
+  try {
+    await batch.commit();
+    console.log('Batch write successful');
+  } catch (error) {
+    console.error('Error updating documents:', error);
+    // Handle error accordingly
+  }
 }
 
 
@@ -80,7 +108,7 @@ export const loadLastDayClients = async () => {
     if(isProduction()|| isDevelopment()){
       paymentDate.setHours(paymentDate.getHours() + 3);
     }
-    
+
     return (
       paymentDate.getFullYear() === yesterday.getFullYear() &&
       paymentDate.getMonth() === yesterday.getMonth()       &&
@@ -89,6 +117,7 @@ export const loadLastDayClients = async () => {
   }).map(product=>{
     const days=calculateDateDifference(product.check_in,product.check_out);
     return {
+      ...product,
         check_in:product.check_in,
         payment:product.payment*days
     }

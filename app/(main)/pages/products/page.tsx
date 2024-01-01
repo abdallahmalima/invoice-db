@@ -247,6 +247,7 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
                         payment: _product.payment,
                         id_no:_product.id_no,
                         room_type:_product.room_type,
+                        reported:false,
                         createdBy:FIREBASE_AUTH.currentUser?.uid,
                         createdAt: serverTimestamp(),
                         
@@ -267,8 +268,8 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
             setProductImage(null);
             setIsLoadingSubmit(false);
         }
-
-
+       
+        
     }
 
 
@@ -509,7 +510,7 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
             <>
                 <Button icon="pi pi-pencil" rounded severity="success" className="mr-2" onClick={() => editProduct(rowData)} />
 
-                {rowData.createdBy==FIREBASE_AUTH?.currentUser?.uid ?<Button icon="pi pi-trash" rounded severity="warning" onClick={() => confirmDeleteProduct(rowData)} />:null}
+                {rowData.createdBy==FIREBASE_AUTH?.currentUser?.uid && rowData?.reported==false ?<Button icon="pi pi-trash" rounded severity="warning" onClick={() => confirmDeleteProduct(rowData)} />:null}
             </>
         );
     };
@@ -560,7 +561,7 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
 
           <div className={hasData && `flex space-x-4`}>
             <Button label="Cancel" icon="pi pi-times" text onClick={hideDialog} />
-            {product.createdBy==FIREBASE_AUTH?.currentUser?.uid || !product?.id ?  <Button
+            {(product.createdBy==FIREBASE_AUTH?.currentUser?.uid  && product?.reported==false) || !product?.id  ?  <Button
               label={!isLoadingSubmit ? `Save` : <LoadingSpinner />}
               icon={!isLoadingSubmit && `pi pi-check`}
               text

@@ -1,13 +1,13 @@
 export function isLocalhost(){
-    return process.env.NODE_ENV=='localhost'
+    return process.env.SERVER_ENV=='localhost'
 }
 
 export function isProduction(){
-    return process.env.NODE_ENV=='production'
+    return process.env.SERVER_ENV=='production'
 }
 
 export function isDevelopment(){
-    return process.env.NODE_ENV=='development'
+    return process.env.SERVER_ENV=='development'
 }
 
 export function getReportEmails(emails){
