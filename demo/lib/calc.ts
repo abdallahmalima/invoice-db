@@ -1,4 +1,5 @@
 import { calculateDateDifference } from "./date";
+import { isDevelopment, isProduction } from "./env";
 
 export function getTotalTodayPayments(products) {
     const today = new Date();
@@ -102,6 +103,11 @@ return totalSales
 
   function getLastWeekMondayAndSunday() {
     const today = new Date();
+
+    if(isProduction()|| isDevelopment()){
+      today.setHours(today.getHours() + 3);
+    }
+
     const dayOfWeek = today.getDay(); // 0 is Sunday, 1 is Monday, etc.
   
     // Calculate the difference between the current day and Monday
@@ -175,8 +181,7 @@ return totalSales
 
   export function getTotalSalesLastWeekDatasetApi(products) {
     const { lastWeekMonday, lastWeekSunday } = getLastWeekMondayAndSunday();
-    lastWeekMonday.setHours(lastWeekMonday.getHours() + 3);
-    lastWeekSunday.setHours(lastWeekSunday.getHours() + 3);
+    
     
   const filtedProducts= products
     .filter(payment => {
@@ -230,6 +235,9 @@ return totalSales
 
   function getCurrentWeekMondayAndSunday() {
     const today = new Date();
+    if(isProduction()|| isDevelopment()){
+      today.setHours(today.getHours() + 3);
+    }
     const dayOfWeek = today.getDay(); // 0 is Sunday, 1 is Monday, etc.
   
     // Calculate the difference between the current day and Monday
@@ -300,8 +308,7 @@ return totalSales
 
   export function getTotalSalesThisWeekDatasetApi(products) {
     const {  currentWeekMonday, currentWeekSunday } = getCurrentWeekMondayAndSunday();
-    currentWeekMonday.setHours(currentWeekMonday.getHours() + 3);
-    currentWeekSunday.setHours(currentWeekSunday.getHours() + 3);
+   
     const filtedProducts= products
     .filter(payment => {
       const paymentDate = payment.check_in;
