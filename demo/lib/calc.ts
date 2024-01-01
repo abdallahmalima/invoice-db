@@ -374,7 +374,7 @@ return totalSales
   
     // Calculate the difference and percentage change
     const salesDifference = totalThisWeekSales - totalLastWeekSales;
-    const percentageChange = totalLastWeekSales !== 0 ? ((salesDifference / totalLastWeekSales) * 100).toFixed(2) : 100;
+    const percentageChange = totalLastWeekSales !== 0 ? ((salesDifference / totalLastWeekSales) * 100).toFixed(2) : 0;
   
     // Determine if it's a rise or fall
     const status = salesDifference >= 0 ? 'Rise' : 'Fall';
@@ -429,7 +429,7 @@ return totalSales
   
     // Calculate the difference and percentage change
     const salesDifferenceMonth = totalThisWeekSalesMonth - totalLastWeekSalesMonth;
-    const percentageChangeMonth = totalLastWeekSalesMonth !== 0 ? ((salesDifferenceMonth / totalLastWeekSalesMonth) * 100).toFixed(2) : 100;
+    const percentageChangeMonth = totalLastWeekSalesMonth !== 0 ? ((salesDifferenceMonth / totalLastWeekSalesMonth) * 100).toFixed(2) : 0;
   
     // Determine if it's a rise or fall
     const statusMonth = salesDifferenceMonth >= 0 ? 'Rise' : 'Fall';
