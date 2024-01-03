@@ -18,11 +18,11 @@ import { Toolbar } from 'primereact/toolbar';
 import { classNames } from 'primereact/utils';
 import React, { useEffect, useRef, useState } from 'react';
 import { Demo } from '../../../../types/types';
-import { addDoc, collection, doc, updateDoc, onSnapshot, deleteDoc, where, query, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc, onSnapshot, deleteDoc, where, query, serverTimestamp, setDoc } from "firebase/firestore";
 import { FIRESTORE_DB, FIREBASE_AUTH } from "../../../../firebase.config";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import { uuid as uuidv4 } from 'uuidv4';
-import { createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signOut} from 'firebase/auth';
 import { Skeleton } from 'primereact/skeleton';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useClients, useUsers } from '../../../../demo/hook/DataFetcher';
@@ -69,7 +69,7 @@ const Product = () => {
 
     const [isLoading, setIsLoading, products, setProducts, loadProducts] = useUsers()
 
-
+console.log(products)
    
 
     
@@ -171,10 +171,10 @@ const Product = () => {
                     l_name: _product.l_name,
                     phone: _product.phone,
                     branch: _product.branch,
-                    
+ 
                 })
                 loadProducts()
-                toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Client Updated', life: 3000 });
+                toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'User Updated', life: 3000 });
                 console.log(product.id)
 
             } else {
@@ -186,16 +186,17 @@ const Product = () => {
                       const {user} = userCredential;
                     
                       setIsLoadingSubmit(true)
-                      const doc = await addDoc(collection(FIRESTORE_DB, 'users'), {
+                      await setDoc(doc(FIRESTORE_DB, "users", user.uid), {
                         f_name: _product.f_name,
                         l_name: _product.l_name,
                         phone: _product.phone,
                         branch: _product.branch,
-                         uid:user.uid
-                        })
+                        email:user.email
+                        });
+                   
                         console.log(user)
                         loadProducts()
-                        toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Client Created', life: 3000 });
+                        toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'User Created', life: 3000 });
                       
                       
                     })
@@ -246,18 +247,11 @@ const Product = () => {
     };
 
     const deleteProduct = async() => {
-
-        // const reff = doc(FIRESTORE_DB, `users/${product.id}`)
-        // deleteDoc(reff)
-        const formData=new FormData()
-        formData.append('uid',product.id)
-        await deleteUser(formData)
-
-        loadProducts()
-        setDeleteProductDialog(false);
-        setProduct(emptyProduct);
-        toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Client Deleted', life: 3000 });
-
+       sendPasswordResetEmail(FIREBASE_AUTH,product.email)
+         setDeleteProductDialog(false);
+         toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Email Link Sent Successful', life: 3000 });
+      
+        
 
     };
 
@@ -442,14 +436,14 @@ const Product = () => {
         return (
             <>
                 <Button icon="pi pi-pencil" rounded severity="success" className="mr-2" onClick={() => editProduct(rowData)} />
-                <Button icon="pi pi-trash" rounded severity="warning" onClick={() => confirmDeleteProduct(rowData)} />
+                <Button icon="pi pi-lock-open" rounded severity="warning" onClick={() => confirmDeleteProduct(rowData)} />
             </>
         );
     };
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">{`List of Clients`} {` `}
+            <h5 className="m-0">{`List of Users`} {` `}
                 <Badge value={products.length} severity="success" className='text-lg'></Badge>
             </h5>
 
@@ -465,8 +459,8 @@ const Product = () => {
         return product.f_name?.length > 0 &&
             product.l_name?.length > 0 &&
             product.phone?.length > 0 &&
-            product.email?.length > 0 &&
-            product.password?.length > 0 
+            (product.email?.length > 0 || product.id) &&
+            (product.password?.length > 0 || product.id)
           
             
 
@@ -527,7 +521,7 @@ const Product = () => {
     const titleSkeletonBodyTemplate = (rowData: Demo.Post) => {
         return (
             <>
-                <span className="p-column-title">Phone</span>
+                <span className="p-column-title">Phone Number</span>
                 <div className="flex">
                     <div style={{ flex: '1' }}>
                         <Skeleton width="100%" className="mb-2"></Skeleton>
@@ -555,7 +549,7 @@ const Product = () => {
     const priceSkeletonBodyTemplate = (rowData: Demo.Post) => {
         return (
             <>
-                <span className="p-column-title">Street</span>
+                <span className="p-column-title">Branch</span>
                 <div className="flex">
                     <div style={{ flex: '1' }}>
                         <Skeleton width="75%"></Skeleton>
@@ -589,10 +583,9 @@ const Product = () => {
                         value={[{}, {}, {}, {}, {}, {}, {}, {}, {}]}
                     >
                         <Column selectionMode="multiple" headerStyle={{ width: '4rem' }}></Column>
-                        <Column header="Name" body={imageSkeletonBodyTemplate}></Column>
-                        <Column field="title" header="phone" sortable body={titleSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
-                        <Column field="description" header="service" sortable body={descriptionSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
-                        <Column field="price" header="street" sortable body={priceSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
+                        <Column header="User's Name" body={imageSkeletonBodyTemplate}></Column>
+                        <Column field="title" header="Phone Number" sortable body={titleSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
+                        <Column field="price" header="Branch" sortable body={priceSkeletonBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
                         <Column body={actionSkeletonBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
                     </DataTable>}
 
@@ -616,14 +609,13 @@ const Product = () => {
                         responsiveLayout="scroll"
                     >
                         <Column selectionMode="multiple" headerStyle={{ width: '4rem' }}></Column>
-                        <Column field="name" header="Client's Name" sortable body={nameBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
+                        <Column field="f_name" header="User's Name" sortable body={nameBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
                         <Column field="phone" header="Phone Number" body={phoneBodyTemplate} sortable></Column>
-                        <Column field="service" header="Room No." body={serviceBodyTemplate} sortable></Column>
-                        <Column field="street" header="Payment" body={streetBodyTemplate} sortable></Column>
+                        <Column field="branch" header="Branch" body={streetBodyTemplate} sortable></Column>
                         <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
                     </DataTable>}
 
-                    <Dialog visible={productDialog} style={{ width: '470px' }} header="Client's Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
+                    <Dialog visible={productDialog} style={{ width: '470px' }} header="User's Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
                     
                         <div className="formgrid grid">
                             <div className="field col">
@@ -645,8 +637,8 @@ const Product = () => {
                         </div>
                         <div className="field col">
                             <label htmlFor="email">Email:</label>
-                            <InputText placeholder='Enter Email' id="email" value={product.email} onChange={(e) => onInputChange(e, 'email')} required  className={classNames({ 'p-invalid': submitted && !product.email })} />
-                            {submitted && !product.email && <small className="p-invalid">Email: is required.</small>}
+                            <InputText placeholder='Enter Email' id="email" value={product.email} onChange={(e) => onInputChange(e, 'email')} required  className={classNames({ 'p-invalid': submitted && (!product.email && !product.id) })} />
+                            {submitted && (!product.email && !product.id) && <small className="p-invalid">Email: is required.</small>}
                         </div>
                         </div>
                         <div className="formgrid grid">
@@ -657,8 +649,8 @@ const Product = () => {
                             </div>
                         <div className="field col">
                             <label htmlFor="password">Password:</label>
-                            <Password placeholder='Enter Password' id="password" value={product.password} onChange={(e) => onInputChange(e, 'password')} required  className={classNames({ 'p-invalid': submitted && !product.password })} />
-                            {submitted && !product.password && <small className="p-invalid">Passoword: is required.</small>}
+                            <Password placeholder='Enter Password' id="password" value={product.password} onChange={(e) => onInputChange(e, 'password')} required  className={classNames({ 'p-invalid': submitted && (!product.password && !product.id) })} />
+                            {submitted && (!product.password && !product.id) && <small className="p-invalid">Passoword: is required.</small>}
                         </div>
                         </div>
                         
@@ -666,12 +658,12 @@ const Product = () => {
 
                     </Dialog>
 
-                    <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
+                    <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirm Reset Password" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
                         <div className="flex align-items-center justify-content-center">
-                            <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+                            <i className="pi pi-lock-open mr-3" style={{ fontSize: '2rem' }} />
                             {product && (
                                 <span>
-                                    Are you sure you want to delete <b>{product.name}</b>?
+                                    Are you sure you want to reset Password <b>{product.name}</b>?
                                 </span>
                             )}
                         </div>

@@ -1,6 +1,6 @@
-import { collection, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { collection, doc, getDoc, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { FIRESTORE_DB } from "../../firebase.config";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebase.config";
 import { Demo } from "../../types/demo";
 import { ProgressSpinner } from 'primereact/progressspinner';
         
@@ -72,7 +72,7 @@ export const  useUsers=()=>{
       const productRef = collection(FIRESTORE_DB, 'users');
       const q = query(
         productRef,
-        orderBy('createdAt', 'desc'),
+        orderBy('f_name', 'asc'),
       );
     
       const subscriber=onSnapshot(q,{
@@ -104,6 +104,39 @@ export const  useUsers=()=>{
           loadProducts
         ]
 }
+
+export const useUser = (id = null) => {
+  console.log("Userrrrrrrrrrrrrrrrrrr", id);
+  const [isLoadingUser, setIsLoadingUser] = useState(false);
+  const [user, setUser] = useState(null);
+  
+
+  useEffect(() => {
+    const loadUser = async () => {
+      setIsLoadingUser(true);
+      let userData = null;
+
+      if (id) {
+        const docRef = doc(FIRESTORE_DB, "users", id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          userData = {
+            id: docSnap.id,
+            ...docSnap.data(),
+          };
+        }
+      }
+
+      setIsLoadingUser(false);
+      setUser(userData);
+    };
+
+    loadUser();
+  }, [id]);
+
+  return [isLoadingUser, setIsLoadingUser, user, setUser];
+};
 
 export const  useClientsForReports=(start_date,end_date)=>{
   const [isLoading,setIsLoading]=useState(true)

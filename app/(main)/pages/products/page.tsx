@@ -25,7 +25,7 @@ import { uuid as uuidv4 } from 'uuidv4';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { Skeleton } from 'primereact/skeleton';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import { useClients ,useRooms } from '../../../../demo/hook/DataFetcher';
+import { useClients ,useRooms, useUser } from '../../../../demo/hook/DataFetcher';
 import { Badge } from 'primereact/badge';
 import { Calendar } from 'primereact/calendar';
 import LoadingSpinner from '../../../../demo/components/LoadingSpinner';
@@ -73,6 +73,13 @@ const Product = () => {
     const [isLoadingSubmit, setIsLoadingSubmit] = useState(false)
 
     const [isLoading, setIsLoading, products, setProducts, loadProducts] = useClients()
+    const [
+        isLoadingUser,
+        setIsLoadingUser,
+        user,
+        setUser,
+      ]=useUser(FIREBASE_AUTH.currentUser?.uid)
+      console.log("",user)
 
     const [isLoadingRoom, setIsLoadingRoom, rooms, setRooms] = useRooms()
 
@@ -249,6 +256,7 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
                         room_type:_product.room_type,
                         reported:false,
                         createdBy:FIREBASE_AUTH.currentUser?.uid,
+                        createdByName:capitalizeFirstLetter(user?.f_name)+" "+capitalizeFirstLetter(user?.l_name),
                         createdAt: serverTimestamp(),
                         
 
@@ -555,7 +563,7 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
 
          {hasData && <div className="mr-auto mt-5">
             <span className="text-500">By:</span>
-            <span className="text-green-500 font-medium">Joyce Japhet </span>
+            <span className="text-green-500 font-medium">{product?.createdByName} </span>
             
             </div>}
 
