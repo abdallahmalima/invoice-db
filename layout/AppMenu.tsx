@@ -24,15 +24,15 @@ const AppMenu = () => {
                 
                
                 {
-                    label: 'Customers',
+                    label: 'Rooms',
                     icon: 'pi pi-fw pi-table',
                     to: '/pages/products'
                 },
-                {
-                    label: 'Comments',
-                    icon: 'pi pi-fw pi-comment',
-                    to: '/pages/comments'
-                },
+                // {
+                //     label: 'Comments',
+                //     icon: 'pi pi-fw pi-comment',
+                //     to: '/pages/comments'
+                // },
                 
             ]
         },
