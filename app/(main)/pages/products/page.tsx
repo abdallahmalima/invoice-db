@@ -37,6 +37,7 @@ import { useRouter } from 'next/navigation';
 import { getCheckInDateRange } from '../../../../demo/lib/date';
 import { setConstantValue } from 'typescript';
 import { capitalizeFirstLetter } from '../../../../demo/lib/strings';
+import { Checkbox } from 'primereact/checkbox';
 
 
 
@@ -66,6 +67,7 @@ const Product = () => {
     const toast = useRef<Toast>(null);
     const dt = useRef<DataTable<Demo.Product[]>>(null);
     const fileUploadRef = useRef<FileUpload>(null);
+    const [currentUser, setCurrentUser] = useState(false);
 
     const [usageInputFields, setUsageInputFields] = useState<any>([])
     const [diseaseInputFields, setDiseaseInputFields] = useState<any>([])
@@ -116,6 +118,10 @@ const Product = () => {
    
 console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocaleDateString("en-US"))
     
+
+const onCurrentUserChange=()=>{
+setCurrentUser(()=>!currentUser)
+}
 
 
     const dropdownValues: InputValue[] = [
@@ -195,7 +201,7 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
        
         const start_date=new Date(startDate).toLocaleDateString('sw-TZ')
         const end_date=new Date(endDate).toLocaleDateString('sw-TZ')
-        const url = `/reports?start_date=${start_date}&end_date=${end_date}`;
+        const url = `/reports?start_date=${start_date}&end_date=${end_date}&user=${currentUser?FIREBASE_AUTH?.currentUser?.uid:''}`;
         window.open(url, '_blank');
     };
 
@@ -392,6 +398,13 @@ console.log(lowestCheckIn?.toLocaleDateString("en-US"), highestCheckIn?.toLocale
                    setEndDate(e.target.value)
                     }} />
                 </div>
+                <div className="col-12 md:col-3">
+                            <div className="field-checkbox">
+                                <Checkbox inputId="checkOption3" name="option" value={currentUser} checked={currentUser} onChange={onCurrentUserChange} />
+                                <label htmlFor="checkOption3">Current User</label>
+                            </div>
+                </div>
+                
                 </div>
             </React.Fragment>
         );

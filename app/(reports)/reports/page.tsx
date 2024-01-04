@@ -37,7 +37,7 @@ const ReportPage = () => {
   }
   
   
-
+   const isCurrentUser=searchParams.get('user')
    const startDate=convertDateFormat(searchParams.get('start_date'))
    const endDate=convertDateFormat(searchParams.get('end_date'))
    let start_date=''
@@ -51,7 +51,7 @@ const ReportPage = () => {
     end_date=endDate
    }
 
-   const [isLoading, setIsLoading, products, setProducts, loadProducts] = useClientsForReports(start_date,end_date)
+   const [isLoading, setIsLoading, products, setProducts, loadProducts] = useClientsForReports(start_date,end_date,isCurrentUser)
     
    console.log(start_date,end_date)
  

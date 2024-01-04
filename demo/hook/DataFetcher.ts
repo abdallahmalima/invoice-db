@@ -138,7 +138,7 @@ export const useUser = (id = null) => {
   return [isLoadingUser, setIsLoadingUser, user, setUser];
 };
 
-export const  useClientsForReports=(start_date,end_date)=>{
+export const  useClientsForReports=(start_date,end_date,isCurrentUser)=>{
   const [isLoading,setIsLoading]=useState(true)
   const [products, setProducts] = useState<Demo.Product[]>([]);
 
@@ -168,6 +168,14 @@ export const  useClientsForReports=(start_date,end_date)=>{
   
       q = query(q, where('check_in', '<=', date));
     }
+
+    if (isCurrentUser) {
+      if(isCurrentUser.length>0){
+        q = query(q,where("createdBy", "==", isCurrentUser));
+      }
+     
+    }
+    
     q = query(q, orderBy('check_in'));
     
     const subscriber = onSnapshot(q, {
