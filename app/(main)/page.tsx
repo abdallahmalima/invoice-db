@@ -41,7 +41,7 @@ const lineDataMonth: ChartData = {
     labels: generateDateLabels(1, 31), // Replace labels with generated date labels
     datasets: [
       {
-        label: 'Last Week Dataset',
+        label: 'Last Month Dataset',
         data: [65, 59, 80, 81, 56, 55, 40],
         fill: false,
         backgroundColor: '#2f4860',
@@ -49,7 +49,7 @@ const lineDataMonth: ChartData = {
         tension: 0.4
       },
       {
-        label: 'This Week Dataset',
+        label: 'This Month Dataset',
         data: [28, 48, 40, 19, 86, 27, 90],
         fill: false,
         backgroundColor: '#00bb7e',
