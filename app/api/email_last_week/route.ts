@@ -31,13 +31,21 @@ if (today.getDay() !== 1) {
   const emails:any =await loadReportEmails()
   const totalPayments:any = clients.reduce((totalPayments:number, client:any) => totalPayments + client.payment, 0);
 
+   const roomsData={
+    used_room:null,
+    used_room_count:null,
+    not_used_room:null,
+    not_used_room_count:null,
+  }
+
   let reportEmails=getReportEmails(emails)
       try {
         const data = await resend.emails.send({
           from: 'Joshmal Hotels <promo@jasmai.design>',
           to: reportEmails,
           subject: 'Sales Report',
-          react: EmailTemplate({ totalPayments,
+          react: EmailTemplate({roomsData, 
+            totalPayments,
             numberOfClients:clients.length,
             whenDay:'Last Week' }),
         });
