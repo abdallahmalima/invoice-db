@@ -185,6 +185,7 @@ export const loadRoomsUsedYesterday = async () => {
     if(isProduction()|| isDevelopment()){
       paymentDate.setHours(paymentDate.getHours() + 3);
       checkInDate.setHours(checkInDate.getHours() + 3);
+      //hello
     }
 
     return (
