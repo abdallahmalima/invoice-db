@@ -18,17 +18,18 @@ export async function GET(request: Request) {
   await initAdmin();
  
   const clients:any =await loadLastDayClients()
+  const roomsData:any =await loadRoomsUsedYesterday()
   const emails:any =await loadReportEmails()
   const totalPayments:any = clients.reduce((totalPayments:number, client:any) => totalPayments + client.payment, 0);
 
   let reportEmails=getReportEmails(emails)
-
+  
       try {
         const data = await resend.emails.send({
           from: 'Joshmal Hotels <promo@jasmai.design>',
           to:reportEmails,
           subject: 'Sales Report',
-          react: EmailTemplate({ totalPayments,numberOfClients:clients.length, whenDay:'Yesterday' }),
+          react: EmailTemplate({roomsData, totalPayments,numberOfClients:clients.length, whenDay:'Yesterday' }),
         });
     
         console.log("yesss")
@@ -37,6 +38,8 @@ export async function GET(request: Request) {
       }
 
       await markClientsAsReported(clients);
+
+
 
      const yesterday = new Date();
      yesterday.setDate(yesterday.getDate() - 1);
@@ -122,6 +125,106 @@ export const loadLastDayClients = async () => {
         payment:product.payment*days
     }
   })
+};
+
+const customSort = (arr) => {
+  // Split the array into numeric and non-numeric parts
+  const numericValues = [];
+  const nonNumericValues = [];
+  
+  arr.forEach(item => {
+    if (/^\d+$/.test(item)) {
+      numericValues.push(Number(item));
+    } else {
+      nonNumericValues.push(item);
+    }
+  });
+  
+  // Sort the numeric values
+  numericValues.sort((a, b) => a - b);
+  
+  // Merge both parts back together
+  return [...numericValues.map(String), ...nonNumericValues];
+};
+
+export const loadRoomsUsedYesterday = async () => {
+  const firestore = getFirestore();
+  const productRef = await firestore.collection( 'products').get();
+
+  const products:any = [];
+ 
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  
+  if(isProduction()|| isDevelopment()){
+    yesterday.setHours(yesterday.getHours() + 3);
+  }
+  
+
+  const querySnapshot = productRef.docs;
+  querySnapshot.forEach((doc) => {
+   
+    // Assuming check_in is a Firestore Timestamp
+    const check_in = doc.data().check_in?.toDate();
+    const check_out = doc.data().check_out?.toDate();
+    const createdAt = doc.data().createdAt?.toDate();
+    products.push({
+      id: doc.id,
+      ...doc.data(),
+      check_in,
+      check_out,
+      createdAt,
+    });
+    
+  });
+
+  const unsorted_used_rooms= products .filter(payment => {
+    const paymentDate = payment.check_out;
+
+    if(isProduction()|| isDevelopment()){
+      paymentDate.setHours(paymentDate.getHours() + 3);
+    }
+
+    return (
+      paymentDate.getFullYear() > yesterday.getFullYear() ||
+      paymentDate.getFullYear() == yesterday.getFullYear() && paymentDate.getMonth() > yesterday.getMonth() ||
+      paymentDate.getFullYear() == yesterday.getFullYear() && paymentDate.getMonth() == yesterday.getMonth() && paymentDate.getDate() > yesterday.getDate()
+    );
+  }).map(product=>{
+    
+    return product.room_no; 
+    
+  })
+
+  const roomRef = await firestore.collection( 'rooms').get();
+
+  const rooms:any = [];
+ 
+  
+  
+
+  const querySnapshotRoom = roomRef.docs;
+  querySnapshotRoom.forEach((doc) => {
+   
+   
+    rooms.push({
+      id: doc.id,
+      ...doc.data(),
+      
+    });
+    
+  });
+   const unsorted_data=rooms.filter(room => !unsorted_used_rooms.includes(room.room_no)).map(room=>room.room_no);
+  const not_used_rooms = customSort(unsorted_data)
+  const used_rooms=customSort(unsorted_used_rooms)
+
+
+  return {
+    used_room:used_rooms,
+    used_room_count:used_rooms.length,
+    not_used_room:not_used_rooms,
+    not_used_room_count:not_used_rooms.length,
+  }
 };
 
 export const loadReportEmails = async () => {
