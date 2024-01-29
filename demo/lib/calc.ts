@@ -29,6 +29,7 @@ export function getTotalTodayPayments(products) {
   export function getTotalThisWeekPayments(products) {
 
     const {  currentWeekMonday, currentWeekSunday } = getCurrentWeekMondayAndSunday();
+    
     const filtedProducts= products
     .filter(payment => {
       const paymentDate = payment.check_in;
@@ -43,9 +44,10 @@ export function getTotalTodayPayments(products) {
       const lastWeekSundayYear =  currentWeekSunday.getFullYear();
       const lastWeekSundayMonth = currentWeekSunday.getMonth();
       const lastWeekSundayDay = currentWeekSunday.getDate();
-
+     
       return (
-        (paymentYear === lastWeekMondayYear && paymentMonth === lastWeekMondayMonth) && (paymentDay >= lastWeekMondayDay && paymentDay <= lastWeekSundayDay)
+        (paymentYear === lastWeekMondayYear && paymentMonth === lastWeekMondayMonth) && (paymentDay >= lastWeekMondayDay && paymentDay <= lastWeekSundayDay) ||
+        (paymentYear === lastWeekMondayYear && paymentMonth < lastWeekSundayMonth) && (paymentDay >= lastWeekMondayDay && paymentDay >= lastWeekSundayDay)
        
       );
     }).map(product=>{
@@ -55,6 +57,8 @@ export function getTotalTodayPayments(products) {
             payment:product.payment*days
         }
       })
+
+     
 
 const totalSales=filtedProducts.reduce((total, payment) => total + payment.payment, 0);
 

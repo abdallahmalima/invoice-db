@@ -180,6 +180,7 @@ export const loadRoomsUsedYesterday = async () => {
 
   const unsorted_used_rooms= products .filter(payment => {
     const paymentDate = payment.check_out;
+    const checkInDate = payment.check_in;
 
     if(isProduction()|| isDevelopment()){
       paymentDate.setHours(paymentDate.getHours() + 3);
@@ -188,7 +189,7 @@ export const loadRoomsUsedYesterday = async () => {
     return (
       paymentDate.getFullYear() > yesterday.getFullYear() ||
       paymentDate.getFullYear() == yesterday.getFullYear() && paymentDate.getMonth() > yesterday.getMonth() ||
-      paymentDate.getFullYear() == yesterday.getFullYear() && paymentDate.getMonth() == yesterday.getMonth() && paymentDate.getDate() > yesterday.getDate()
+      paymentDate.getFullYear() == yesterday.getFullYear() && paymentDate.getMonth() == yesterday.getMonth() && (paymentDate.getDate() > yesterday.getDate() && checkInDate.getDate()<=yesterday.getDate())
     );
   }).map(product=>{
     
