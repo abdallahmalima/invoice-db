@@ -693,7 +693,7 @@ setCurrentUser(()=>!currentUser)
             product.room_no?.length > 0 &&
             product.room_type && 
             product.id_no?.length > 0 &&
-            product.payment > 0
+            product.payment >= 0
             
 
 
