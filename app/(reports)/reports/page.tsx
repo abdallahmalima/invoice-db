@@ -74,7 +74,7 @@ const ReportPage = () => {
      const days=calculateDateDifference(product.check_in,product.check_out);
     return{
     name: capitalizeFirstLetter(product.f_name) + " " + capitalizeFirstLetter(product.l_name),
-    phone: product.phone,
+    room_no: product.room_no,
     checkIn: new Date(product.check_in).toLocaleDateString('sw-TZ'),
     checkOut: new Date(product.check_out).toLocaleDateString('sw-TZ'),
     days: days, // You may want to calculate the actual days difference
@@ -152,7 +152,7 @@ const ReportPage = () => {
           <thead>
             <tr>
               <th style={styles.tableHeader}>Name</th>
-              <th style={styles.tableHeader}>Phone</th>
+              <th style={styles.tableHeader}>Room No.</th>
               <th style={styles.tableHeader}>Check-in</th>
               <th style={styles.tableHeader}>Check-out</th>
               <th style={styles.tableHeader}>Days</th>
@@ -164,7 +164,7 @@ const ReportPage = () => {
             {clientsData.map((client, index) => (
               <tr key={index}>
                 <td>{client.name}</td>
-                <td>{client.phone}</td>
+                <td>{client.room_no}</td>
                 <td>{client.checkIn}</td>
                 <td>{client.checkOut}</td>
                 <td>{client.days}</td>
