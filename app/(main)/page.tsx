@@ -86,6 +86,7 @@ const monthlyPayments= getTotalThisMonthPayments(products)
 const yearlyPayments= getTotalThisYearPayments(products)
 const weeklyPaymentsDataset= getTotalSalesLastWeekDataset(products)
 const thisweeklyPaymentsDataset=getTotalSalesThisWeekDataset(products)
+console.log("yeeeeeeeeeeeeeeeeeeeeeer",thisweeklyPaymentsDataset)
 const lastMonthPaymentsDataset=getTotalSalesLastMonthDataset(products)
 const thisMonthPaymentsDataset=getTotalSalesCurrentMonthDataset(products)
 console.log("dataset",thisMonthPaymentsDataset)
@@ -97,7 +98,8 @@ const {
     totalLastWeekSales,
     totalThisWeekSales,
   }= calculateSalesDifference(weeklyPaymentsDataset,thisweeklyPaymentsDataset)
-
+console.log("last weeeeeeeeeeeeeeek",totalLastWeekSales)
+console.log("this weeeeeeeeeeeeeeek",totalThisWeekSales)
   const {
     salesDifferenceMonth,
     percentageChangeMonth,
