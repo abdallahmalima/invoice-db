@@ -193,6 +193,7 @@ export const loadRoomsUsedYesterday = async () => {
       paymentDate.getFullYear() > yesterday.getFullYear() ||
       paymentDate.getFullYear() == yesterday.getFullYear() && paymentDate.getMonth() > yesterday.getMonth() ||
       paymentDate.getFullYear() == yesterday.getFullYear() && paymentDate.getMonth() == yesterday.getMonth() && (paymentDate.getDate() > yesterday.getDate() && checkInDate.getDate()<=yesterday.getDate())
+      ||(paymentDate.getDate() == yesterday.getDate() && checkInDate.getDate()==yesterday.getDate())
     );
   }).map(product=>{
     
