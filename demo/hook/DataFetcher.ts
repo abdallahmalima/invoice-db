@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebase.config";
 import { Demo } from "../../types/demo";
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { isDevelopment, isProduction } from "../lib/env";
         
 
 export const  useClients=()=>{
@@ -245,6 +246,124 @@ export const  useClientsForReports=(start_date,end_date,isCurrentUser)=>{
         console.log(products);
         setIsLoading(false);
         setProducts(products);
+      },
+    });
+  
+    return subscriber;
+  };
+  
+
+  return [
+          isLoading,
+          setIsLoading,
+          products,
+          setProducts,
+          loadProducts
+        ]
+}
+
+export const  useClientsForRoomReports=(start_date,end_date,isCurrentUser)=>{
+  const [isLoading,setIsLoading]=useState(true)
+  const [products, setProducts] = useState<Demo.Product[]>([]);
+
+  useEffect(() => {
+      const unsubscribe=loadProducts()
+
+        return ()=>{
+          unsubscribe()
+        }
+  }, []);
+
+  const loadProducts = () => {
+    setIsLoading(true);
+    const productRef = collection(FIRESTORE_DB, 'products');
+    
+  
+    const yesterday = new Date(start_date);
+   
+  
+  // if(isProduction()|| isDevelopment()){
+  //   yesterday.setHours(yesterday.getHours() + 3);
+  // }
+
+  const productReff = collection(FIRESTORE_DB, 'rooms');
+  const q = query(
+    productReff,
+    orderBy('room_no', 'asc'),
+  );
+
+  const all_rooms:any=[];
+  const subscriberr=onSnapshot(q,{
+      next:(snapshot)=>{
+        
+        snapshot.docs.forEach((doc)=>{
+          const createdAt=doc.data().createdAt?.toDate()
+          all_rooms.push({
+            id:doc.id,
+            ...doc.data(),
+            createdAt,
+          })
+          
+        })
+        
+       
+      }
+    })
+
+
+
+    
+    const subscriber = onSnapshot(productRef, {
+      next: (snapshot) => {
+        const products = [];
+        snapshot.docs.forEach((doc) => {
+          const check_in = doc.data().check_in?.toDate();
+          const check_out = doc.data().check_out?.toDate();
+          const createdAt = doc.data().createdAt?.toDate();
+          products.push({
+            id: doc.id,
+            ...doc.data(),
+            check_in,
+            check_out,
+            createdAt,
+          });
+        });
+
+
+        const rooms_used= products.filter(payment => {
+          const paymentDate = payment.check_out;
+          const checkInDate = payment.check_in;
+      
+          // if(isProduction()|| isDevelopment()){
+          //   paymentDate.setHours(paymentDate.getHours() + 3);
+          //   checkInDate.setHours(checkInDate.getHours() + 3);
+          //   //hello
+          // }
+      
+          return (
+            paymentDate.getFullYear() > yesterday.getFullYear() ||
+            paymentDate.getFullYear() == yesterday.getFullYear() && paymentDate.getMonth() > yesterday.getMonth() ||
+            paymentDate.getFullYear() == yesterday.getFullYear() && paymentDate.getMonth() == yesterday.getMonth() && (paymentDate.getDate() > yesterday.getDate() && checkInDate.getDate()<=yesterday.getDate())
+          );
+        })
+  
+        
+        const rooms = rooms_used.map(room=>{
+        const cur_room=all_rooms.find(roomm=>roomm.room_no==room.room_no)
+          return {
+            room_no:room.room_no,
+            room_type:cur_room?.room_type?.name,
+            price:room.payment,
+            price_min:cur_room?.payment_min,
+            price_max:cur_room?.payment,
+            date:new Date(yesterday).toLocaleDateString('sw-TZ'),
+            user:room.createdByName,
+
+          }
+        })
+        console.log("malimaaaaaaaaaaaaaaa",rooms);
+        setIsLoading(false);
+        setProducts(rooms);
       },
     });
   

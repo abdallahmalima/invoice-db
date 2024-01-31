@@ -201,7 +201,7 @@ setCurrentUser(()=>!currentUser)
        
         const start_date=new Date(startDate).toLocaleDateString('sw-TZ')
         const end_date=new Date(endDate).toLocaleDateString('sw-TZ')
-        const url = `/reports?start_date=${start_date}&end_date=${end_date}&user=${currentUser?FIREBASE_AUTH?.currentUser?.uid:''}`;
+        const url = `/reports/rooms?start_date=${start_date}&end_date=${end_date}&user=${currentUser?FIREBASE_AUTH?.currentUser?.uid:''}`;
         window.open(url, '_blank');
     };
 
@@ -373,23 +373,11 @@ setCurrentUser(()=>!currentUser)
                 <div className="my-2 flex">
                 <Button icon="pi pi-print" severity="danger"  onClick={openPrint}/>
                 <div className='ml-3'>
-                <Calendar maxDate={new Date(endDate)} dateFormat="dd/mm/yy"  placeholder='Start Date' showIcon showButtonBar value={startDate} onChange={(e)=>{
+                <Calendar maxDate={new Date(endDate)} dateFormat="dd/mm/yy"  placeholder='Select Date' showIcon showButtonBar value={startDate} onChange={(e)=>{
                     console.log(e.target.value)
                     setCalenderChangedByUser(true)
                     setStartDate(e.target.value)
                     }} />
-                </div>
-                <div className='ml-3'>
-                <Calendar minDate={new Date(startDate)} dateFormat="dd/mm/yy" placeholder='End Date' showIcon showButtonBar value={endDate} onChange={(e)=>{
-                   setCalenderChangedByUser(true)
-                   setEndDate(e.target.value)
-                    }} />
-                </div>
-                <div className="col-12 md:col-3">
-                            <div className="field-checkbox">
-                                <Checkbox inputId="checkOption3" name="option" value={currentUser} checked={currentUser} onChange={onCurrentUserChange} />
-                                <label htmlFor="checkOption3">Current User</label>
-                            </div>
                 </div>
                 
                 </div>
