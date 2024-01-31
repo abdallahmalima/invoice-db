@@ -79,7 +79,7 @@ const ReportPage = () => {
     checkOut: new Date(product.check_out).toLocaleDateString('sw-TZ'),
     days: days, // You may want to calculate the actual days difference
     payment: product.payment,
-    total: product.payment* days,
+    total: days>0?product.payment*days:product.payment,
     // ... other properties
   }});
 
@@ -167,7 +167,7 @@ const ReportPage = () => {
                 <td>{client.room_no}</td>
                 <td>{client.checkIn}</td>
                 <td>{client.checkOut}</td>
-                <td>{client.days}</td>
+                <td>{client.days || 1}</td>
                 <td>{formatNumberWithCommas(client.payment)}</td>
                 <td>{formatNumberWithCommas(client.total)}</td>
               </tr>

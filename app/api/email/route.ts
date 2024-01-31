@@ -34,6 +34,7 @@ export async function GET(request: Request) {
     
         console.log("yesss")
       } catch (error) {
+        console.log("Nooooooo")
         console.log(error)
       }
 
@@ -122,7 +123,7 @@ export const loadLastDayClients = async () => {
     return {
       ...product,
         check_in:product.check_in,
-        payment:product.payment*days
+        payment:days>0?product.payment*days:product.payment
     }
   })
 };

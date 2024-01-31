@@ -24,9 +24,14 @@ const AppMenu = () => {
                 
                
                 {
+                    label: ' Reservations',
+                    icon: 'pi pi-fw pi-users',
+                    to: '/pages/products'
+                },
+                {
                     label: 'Rooms',
                     icon: 'pi pi-fw pi-table',
-                    to: '/pages/products'
+                    to: '/pages/rooms'
                 },
                 // {
                 //     label: 'Comments',

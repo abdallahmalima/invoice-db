@@ -119,7 +119,7 @@ export const loadLastWeekClients = async () => {
       const days=calculateDateDifference(product.check_in,product.check_out);
       return {
           check_in:product.check_in,
-          payment:product.payment*days
+          payment:days>0?product.payment*days:product.payment
       }
     })
 };

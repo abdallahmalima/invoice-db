@@ -61,6 +61,7 @@ const Product = () => {
     const [deleteProductDialog, setDeleteProductDialog] = useState(false);
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
     const [product, setProduct] = useState<Demo.Product>(emptyProduct);
+    const [productOld, setProductOld] = useState<Demo.Product>(emptyProduct);
     const [selectedProducts, setSelectedProducts] = useState<Demo.Product[]>([]);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState('');
@@ -282,6 +283,7 @@ setCurrentUser(()=>!currentUser)
 
     const editProduct = (product: Demo.Product) => {
         setProduct({ ...product });
+        setProductOld({ ...product });
         setUsageInputFields(product.usages)
         setDiseaseInputFields(product.diseases)
         setProductDialog(true);
@@ -542,6 +544,11 @@ setCurrentUser(()=>!currentUser)
         </div>
     );
 
+    const isExists=()=>{
+        console.log("roooooooooooooooooooooooom",product.room_no,productOld.room_no)
+     return products.find(p=>p.room_no==product.room_no) && !product.id || products.find(p=>p.room_no==product.room_no) && (product.room_no!=productOld.room_no)
+    }
+
     const isFormFilled = () => {
 
         
@@ -569,13 +576,13 @@ setCurrentUser(()=>!currentUser)
 
           <div className={hasData && `flex space-x-4`}>
             <Button label="Cancel" icon="pi pi-times" text onClick={hideDialog} />
-            <Button
+            {(product.createdBy==FIREBASE_AUTH?.currentUser?.uid) || !product?.id  ?  <Button
               label={!isLoadingSubmit ? `Save` : <LoadingSpinner />}
               icon={!isLoadingSubmit && `pi pi-check`}
               text
               onClick={saveProduct}
-              disabled={!isFormFilled() || isLoadingSubmit}
-            />
+              disabled={!isFormFilled() || isLoadingSubmit || isExists()}
+            />:null}
           </div>
         </div>
         </>

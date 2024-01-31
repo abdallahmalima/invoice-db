@@ -343,7 +343,7 @@ export const  useClientsForRoomReports=(start_date,end_date,isCurrentUser)=>{
           return (
             paymentDate.getFullYear() > yesterday.getFullYear() ||
             paymentDate.getFullYear() == yesterday.getFullYear() && paymentDate.getMonth() > yesterday.getMonth() ||
-            paymentDate.getFullYear() == yesterday.getFullYear() && paymentDate.getMonth() == yesterday.getMonth() && (paymentDate.getDate() > yesterday.getDate() && checkInDate.getDate()<=yesterday.getDate())
+            paymentDate.getFullYear() == yesterday.getFullYear() && paymentDate.getMonth() == yesterday.getMonth() && (paymentDate.getDate() > yesterday.getDate() && checkInDate.getDate()<=yesterday.getDate())||(paymentDate.getDate() == yesterday.getDate() && checkInDate.getDate()==yesterday.getDate())
           );
         })
   

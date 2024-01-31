@@ -19,7 +19,7 @@ export function getTotalTodayPayments(products) {
       .map(product=>{
         const days=calculateDateDifference(product.check_in,product.check_out);
         return {
-            payment:product.payment*days
+            payment:days>0?product.payment*days:product.payment
         }
       })
       .reduce((total, payment) => total + payment.payment, 0);
@@ -54,7 +54,7 @@ export function getTotalTodayPayments(products) {
         const days=calculateDateDifference(product.check_in,product.check_out);
         return {
             check_in:product.check_in,
-            payment:product.payment*days
+            payment:days>0?product.payment*days:product.payment
         }
       })
 
@@ -84,7 +84,7 @@ return totalSales
       .map(product=>{
         const days=calculateDateDifference(product.check_in,product.check_out);
         return {
-            payment:product.payment*days
+            payment:days>0?product.payment*days:product.payment
         }
       })
       .reduce((total, payment) => total + payment.payment, 0);
@@ -98,7 +98,7 @@ return totalSales
       .map(product=>{
         const days=calculateDateDifference(product.check_in,product.check_out);
         return {
-            payment:product.payment*days
+            payment:days>0?product.payment*days:product.payment
         }
       })
       .reduce((total, payment) => total + payment.payment, 0);
@@ -212,7 +212,7 @@ return totalSales
         const days=calculateDateDifference(product.check_in,product.check_out);
         return {
             check_in:product.check_in,
-            payment:product.payment*days
+            payment:days>0?product.payment*days:product.payment
         }
       })
     
@@ -285,7 +285,7 @@ return totalSales
         const days=calculateDateDifference(product.check_in,product.check_out);
         return {
             check_in:product.check_in,
-            payment:product.payment*days
+            payment:days>0?product.payment*days:product.payment
         }
       })
     
@@ -339,7 +339,7 @@ return totalSales
         const days=calculateDateDifference(product.check_in,product.check_out);
         return {
             check_in:product.check_in,
-            payment:product.payment*days
+            payment:days>0?product.payment*days:product.payment
         }
       })
     
@@ -518,7 +518,7 @@ return totalSales
         const days=calculateDateDifference(product.check_in,product.check_out);
         return {
             check_in:product.check_in,
-            payment:product.payment*days
+            payment:days>0?product.payment*days:product.payment
         }
       })
     
@@ -581,7 +581,7 @@ return totalSales
         const days=calculateDateDifference(product.check_in,product.check_out);
         return {
             check_in:product.check_in,
-            payment:product.payment*days
+            payment:days>0?product.payment*days:product.payment
         }
       })
     
