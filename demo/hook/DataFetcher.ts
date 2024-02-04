@@ -207,14 +207,17 @@ export const  useClientsForReports=(start_date,end_date,isCurrentUser)=>{
     let q = query(productRef);
   
     if (start_date) {
-      q = query(q, where('check_in', '>=', new Date(start_date)));
+      const date = new Date(start_date);
+      date.setHours(0, 0, 0, 0);
+      console.log("start date",date )
+      q = query(q, where('check_in', '>=', date));
     }
   
     if (end_date) {
       // Adjust end_date to include the full day
       const date = new Date(end_date);
-      date.setDate(date.getDate() + 0);
-  
+      date.setHours(0, 0, 0, 0);
+      console.log("end date",date )
       q = query(q, where('check_in', '<=', date));
     }
 
@@ -242,7 +245,7 @@ export const  useClientsForReports=(start_date,end_date,isCurrentUser)=>{
             createdAt,
           });
         });
-  
+         
         console.log(products);
         setIsLoading(false);
         setProducts(products);
@@ -270,7 +273,8 @@ export const  useClientsForRoomReports=(start_date,end_date,isCurrentUser)=>{
       const unsubscribe=loadProducts()
 
         return ()=>{
-          unsubscribe()
+          unsubscribe.subscriber()
+          unsubscribe.subscriberr()
         }
   }, []);
 
@@ -368,7 +372,7 @@ export const  useClientsForRoomReports=(start_date,end_date,isCurrentUser)=>{
       },
     });
   
-    return subscriber;
+    return {subscriber,subscriberr};
   };
   
 

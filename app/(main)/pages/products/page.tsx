@@ -368,14 +368,16 @@ setCurrentUser(()=>!currentUser)
        
       
         const today = new Date();
+        today.setHours(0, 0, 0, 0);
         return today;
       }
 
-      function getFormattedDateTomorrow() {getFormattedDateToday()
+      function getFormattedDateTomorrow() {
        
       
         const today = new Date();
         today.setDate(today.getDate() + 1);
+        today.setHours(0, 0, 0, 0);
         return today
       }
       
@@ -748,6 +750,7 @@ setCurrentUser(()=>!currentUser)
          handleSaveProduct('');
        
          if(isLessPrice){
+            console.log("Nipooooooooooooo")
             const currRoom= clientRoomsArr.find(item=>item.room_no==product.room_no)
             const responsePhone = fetch('/api/email_low_price', {
                 method: 'POST',
