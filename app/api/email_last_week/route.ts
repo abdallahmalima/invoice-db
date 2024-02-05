@@ -71,7 +71,7 @@ export const loadLastWeekClients = async () => {
 
   if(isProduction()|| isDevelopment()){
     lastWeekMonday.setHours(lastWeekMonday.getHours() + 3,0,0,0);
-    lastWeekSunday.setHours(lastWeekSunday.getHours() + 4,59, 59, 999);
+    lastWeekSunday.setHours(lastWeekSunday.getHours() + 3,59, 59, 999);
   }
   
   const firestore = getFirestore();
@@ -158,9 +158,9 @@ export const loadReportEmails = async () => {
 
 function getLastWeekMondayAndSunday() {
   const today = new Date();
-  if(isProduction()|| isDevelopment()){
-    today.setHours(today.getHours() + 3);
-  }
+  // if(isProduction()|| isDevelopment()){
+  //   today.setHours(today.getHours() + 3);
+  // }
 
   const dayOfWeek = today.getDay(); // 0 is Sunday, 1 is Monday, etc.
 
