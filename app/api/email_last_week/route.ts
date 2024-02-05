@@ -66,10 +66,13 @@ export const loadLastWeekClients = async () => {
   const { lastWeekMonday, lastWeekSunday } = getLastWeekMondayAndSunday();
 
 
-  
-
+  lastWeekMonday.setHours(0, 0, 0, 0);
+  lastWeekSunday.setHours(23, 59, 59, 999);
   const firestore = getFirestore();
-  const productRef = await firestore.collection('products').get();
+  const productRef = await firestore.collection('products')
+  .where('check_in', '>=', lastWeekMonday)
+  .where('check_in', '<=', lastWeekSunday)
+  .get();
 
   const products: any = [];
 
@@ -112,7 +115,8 @@ export const loadLastWeekClients = async () => {
     const lastWeekSundayDay = lastWeekSunday.getDate();
 
     return (
-      (paymentYear === lastWeekMondayYear && paymentMonth === lastWeekMondayMonth) && (paymentDay >= lastWeekMondayDay && paymentDay <= lastWeekSundayDay)
+     // (paymentYear === lastWeekMondayYear && paymentMonth === lastWeekMondayMonth) && (paymentDay >= lastWeekMondayDay && paymentDay <= lastWeekSundayDay) ||
+      true
      
     );
   }).map(product=>{
