@@ -57,8 +57,10 @@ if (today.getDay() !== 1) {
 
   
   
- 
-  return new Response("done")
+      const { lastWeekMonday, lastWeekSunday } = getLastWeekMondayAndSunday();
+  return new Response(
+    lastWeekMonday.toISOString()+"---"+lastWeekSunday.toISOString()
+  )
 }
 
 
