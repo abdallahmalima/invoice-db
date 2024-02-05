@@ -57,10 +57,8 @@ if (today.getDay() !== 1) {
 
   
   
-      const { lastWeekMonday, lastWeekSunday } = getLastWeekMondayAndSunday();
-  return new Response(
-    lastWeekMonday.toISOString()+"---"+lastWeekSunday.toISOString()
-  )
+ 
+  return new Response("done")
 }
 
 
@@ -70,12 +68,7 @@ export const loadLastWeekClients = async () => {
 
   lastWeekMonday.setHours(0, 0, 0, 0);
   lastWeekSunday.setHours(23, 59, 59, 999);
-
-  if(isProduction() || isDevelopment()){
-    lastWeekMonday.setHours(lastWeekMonday.getHours() + 3);
-     lastWeekMonday.setHours(lastWeekMonday.getHours() + 3);
-  }
-
+  
   const firestore = getFirestore();
   const productRef = await firestore.collection('products')
   .where('check_in', '>=', lastWeekMonday)
@@ -160,9 +153,9 @@ export const loadReportEmails = async () => {
 
 function getLastWeekMondayAndSunday() {
   const today = new Date();
-  // if(isProduction()|| isDevelopment()){
-  //   today.setHours(today.getHours() + 3);
-  // }
+  if(isProduction()|| isDevelopment()){
+    today.setHours(today.getHours() + 3);
+  }
 
   const dayOfWeek = today.getDay(); // 0 is Sunday, 1 is Monday, etc.
 
