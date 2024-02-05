@@ -70,8 +70,8 @@ export const loadLastWeekClients = async () => {
   lastWeekSunday.setHours(23, 59, 59, 999);
 
   if(isProduction()|| isDevelopment()){
-    lastWeekMonday.setHours(lastWeekMonday.getHours() + 3);
-    lastWeekSunday.setHours(lastWeekSunday.getHours() + 3);
+    lastWeekMonday.setHours(lastWeekMonday.getHours() + 3,0,0,0);
+    lastWeekSunday.setHours(lastWeekSunday.getHours() + 3,59, 59, 999);
   }
   
   const firestore = getFirestore();
