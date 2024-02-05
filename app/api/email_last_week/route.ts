@@ -69,11 +69,6 @@ export const loadLastWeekClients = async () => {
   lastWeekMonday.setHours(0, 0, 0, 0);
   lastWeekSunday.setHours(23, 59, 59, 999);
 
-  if(isProduction() || isDevelopment()){
-    lastWeekMonday.setHours(lastWeekMonday.getHours() + 3);
-    lastWeekSunday.setHours(lastWeekSunday.getHours() + 3);
-  }
-
   const firestore = getFirestore();
   const productRef = await firestore.collection('products')
   .where('check_in', '>=', lastWeekMonday)
