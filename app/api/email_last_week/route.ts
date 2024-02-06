@@ -21,9 +21,9 @@ export async function GET(request: Request) {
     today.setHours(today.getHours() + 3);
   }
 // Check if today is Monday (1 corresponds to Monday)
-if (today.getDay() !== 1) {
-  return new Response("Today is Not Monday!")
-}
+// if (today.getDay() !== 1) {
+//   return new Response("Today is Not Monday!")
+// }
 
   await initAdmin();
  
@@ -58,7 +58,7 @@ if (today.getDay() !== 1) {
   
   
  
-  return new Response("done")
+  return new Response(JSON.stringify(clients))
 }
 
 
@@ -67,7 +67,7 @@ export const loadLastWeekClients = async () => {
 
 
   // lastWeekMonday.setHours(0, 0, 0, 0);
-  // lastWeekSunday.setHours(23, 59, 59, 999);
+  lastWeekSunday.setHours(23, 59, 59, 999);
 
   // if(isProduction()|| isDevelopment()){
   //   lastWeekMonday.setHours(lastWeekMonday.getHours() - 1,0,0,0);
@@ -160,9 +160,9 @@ export const loadReportEmails = async () => {
 function getLastWeekMondayAndSunday() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  if(isProduction()|| isDevelopment()){
-    today.setHours(today.getHours() + 3);
-  }
+  // if(isProduction()|| isDevelopment()){
+  //   today.setHours(today.getHours() - 3);
+  // }
 
   const dayOfWeek = today.getDay(); // 0 is Sunday, 1 is Monday, etc.
 
