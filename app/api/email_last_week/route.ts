@@ -160,9 +160,9 @@ export const loadReportEmails = async () => {
 function getLastWeekMondayAndSunday() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  // if(isProduction()|| isDevelopment()){
-  //   today.setHours(today.getHours() - 3);
-  // }
+  if(isProduction()|| isDevelopment()){
+    today.setHours(today.getHours() + 3);
+  }
 
   const dayOfWeek = today.getDay(); // 0 is Sunday, 1 is Monday, etc.
 
