@@ -121,6 +121,7 @@ export const loadLastWeekClients = async () => {
   }).map(product=>{
       const days=calculateDateDifference(product.check_in,product.check_out);
       return {
+          name:"---"+product.f_name+" "+product.l_name,
           check_in:"---"+product.check_in,
           payment:days>0?product.payment*days:product.payment
       }
