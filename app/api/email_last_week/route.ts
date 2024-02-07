@@ -155,7 +155,7 @@ function getLastWeekMondayAndSunday() {
   today.setHours(0,0,0,0)
   console.log("todayXXXX"+today,"-")
   if(isProduction()|| isDevelopment()){
-    today.setHours(today.getHours() + 3);
+    today.setDate(today.getDate() - 1);
   }
 
   const dayOfWeek = today.getDay(); // 0 is Sunday, 1 is Monday, etc.
