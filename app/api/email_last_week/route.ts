@@ -57,10 +57,8 @@ export async function GET(request: Request) {
 
   
   
-      const serverTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      console.log(serverTimeZone);
-  //return new Response(JSON.stringify(clients))
-  return new Response(new Date().toUTCString())
+ 
+  return new Response(JSON.stringify(clients))
 }
 
 
