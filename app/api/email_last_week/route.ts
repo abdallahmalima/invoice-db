@@ -57,13 +57,16 @@ export async function GET(request: Request) {
 
   
   
- 
-  return new Response(JSON.stringify(clients))
+      const serverTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      console.log(serverTimeZone);
+  //return new Response(JSON.stringify(clients))
+  return new Response(serverTimeZone)
 }
 
 
 export const loadLastWeekClients = async () => {
   const { lastWeekMonday, lastWeekSunday } = getLastWeekMondayAndSunday();
+  
  
   const firestore = getFirestore();
   const productRef = await firestore.collection('products').orderBy("check_in")
@@ -152,9 +155,9 @@ function getLastWeekMondayAndSunday() {
   const today = new Date();
   today.setHours(0,0,0,0)
   console.log("todayXXXX"+today,"-")
- 
+  
   if(isProduction()|| isDevelopment()){
-    today.setHours(today.getHours() + 8);
+    today.setHours(today.getHours() + 3);
   }
 
   const dayOfWeek = today.getDay(); // 0 is Sunday, 1 is Monday, etc.
