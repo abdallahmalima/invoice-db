@@ -64,20 +64,10 @@ export async function GET(request: Request) {
 
 export const loadLastWeekClients = async () => {
   const { lastWeekMonday, lastWeekSunday } = getLastWeekMondayAndSunday();
-
-
-  // lastWeekMonday.setHours(0, 0, 0, 0);
-  lastWeekSunday.setHours(23, 59, 59, 999);
-
-  // if(isProduction()|| isDevelopment()){
-  //   lastWeekMonday.setHours(lastWeekMonday.getHours() - 1,0,0,0);
-  //   lastWeekSunday.setHours(lastWeekSunday.getHours() + 3,59, 59, 999);
-   
-  // }
-  
+ 
   const firestore = getFirestore();
-  const productRef = await firestore.collection('products')
-  .where('check_in', '>=', lastWeekMonday)
+  const productRef = await firestore.collection('products').orderBy("check_in")
+   .where('check_in', '>=', lastWeekMonday)
   .where('check_in', '<=', lastWeekSunday)
   .get();
 
@@ -89,6 +79,7 @@ export const loadLastWeekClients = async () => {
   const querySnapshot = productRef.docs;
   querySnapshot.forEach((doc) => {
          const check_in = doc.data().check_in?.toDate();
+        console.log("My Checkin-"+check_in,"name-"+doc.data().f_name)
           const check_out = doc.data().check_out?.toDate();
           const createdAt = doc.data().createdAt?.toDate();
           products.push({
@@ -102,7 +93,7 @@ export const loadLastWeekClients = async () => {
 
   return products .filter(payment => {
     const paymentDate = payment.check_in;
-
+    console.log(paymentDate)
     if(isProduction() || isDevelopment()){
       paymentDate.setHours(paymentDate.getHours() + 3);
     }
@@ -159,7 +150,9 @@ export const loadReportEmails = async () => {
 
 function getLastWeekMondayAndSunday() {
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setHours(0,0,0,0)
+  console.log("todayXXXX"+today,"-")
+ 
   if(isProduction()|| isDevelopment()){
     today.setHours(today.getHours() + 3);
   }
@@ -168,14 +161,23 @@ function getLastWeekMondayAndSunday() {
 
   // Calculate the difference between the current day and Monday
   const daysSinceMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+  console.log("daysSinceMonday",daysSinceMonday)
 
   // Calculate last week's Monday by subtracting the difference plus 7 days from the current date
   const lastWeekMonday = new Date(today);
-  lastWeekMonday.setDate(today.getDate() - daysSinceMonday - 7);
+  console.log("lastWeekMondayXXXX"+today,"-")
+  
 
+  lastWeekMonday.setDate(today.getDate() - daysSinceMonday - 7);
+  console.log("lastWeekMondayXXXX"+lastWeekMonday,"-")
+  
   // Calculate last week's Sunday by subtracting one day from last week's Monday
-  const lastWeekSunday = new Date(lastWeekMonday);
+  const lastWeekSunday = new Date(lastWeekMonday); 
+
   lastWeekSunday.setDate(lastWeekMonday.getDate() + 6);
+
+  lastWeekSunday.setHours(23, 59, 59, 999);
+  console.log("lastWeekSundayXXXX"+lastWeekSunday,"-")
 
   return { lastWeekMonday, lastWeekSunday };
 }
