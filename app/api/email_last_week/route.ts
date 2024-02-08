@@ -56,9 +56,17 @@ export async function GET(request: Request) {
       }
 
   
+      const { lastWeekMonday, lastWeekSunday } = getLastWeekMondayAndSunday();
   
+      if(isProduction()|| isDevelopment()){
+        lastWeekMonday.setDate(lastWeekMonday.getDate() - 1);
+        lastWeekSunday.setDate(lastWeekSunday.getDate() - 1);
+      }
  
-  return new Response(JSON.stringify(clients))
+  return new Response(JSON.stringify({
+    lastWeekMonday:"---"+lastWeekMonday, 
+    lastWeekSunday:"---"+lastWeekSunday,
+  }))
 }
 
 
