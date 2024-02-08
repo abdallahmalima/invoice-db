@@ -21,9 +21,9 @@ export async function GET(request: Request) {
     today.setHours(today.getHours() + 3);
   }
 // Check if today is Monday (1 corresponds to Monday)
-// if (today.getDay() !== 1) {
-//   return new Response("Today is Not Monday!")
-// }
+if (today.getDay() !== 1) {
+  return new Response("Today is Not Monday!")
+}
 
   await initAdmin();
  
