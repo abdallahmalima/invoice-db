@@ -4,6 +4,8 @@ import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebase.config";
 import { Demo } from "../../types/demo";
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { isDevelopment, isProduction } from "../lib/env";
+import getCurrentWeekMondayAndSunday, { getCurrentWeekMondayAndSundayClient } from "../lib/calc";
+
         
 
 export const  useClients=()=>{
@@ -56,6 +58,63 @@ export const  useClients=()=>{
             setProducts,
             loadProducts
           ]
+}
+
+export const  useClientsWeekly=()=>{
+  const [isLoadingWeekly,setIsLoadingWeekly]=useState(false)
+  const [productsWeekly, setProductsWeekly] = useState<Demo.Product[]>([]);
+
+  useEffect(() => {
+      const unsubscribe=loadProductsWeekly()
+
+        return ()=>{unsubscribe()}
+  }, []);
+
+  const loadProductsWeekly=()=>{
+      setIsLoadingWeekly(true)
+      const {  currentWeekMonday, currentWeekSunday } = getCurrentWeekMondayAndSundayClient();
+     console.log({"currentWeekMonday":"---"+currentWeekMonday,currentWeekSunday:"---"+currentWeekSunday})
+      const productRef = collection(FIRESTORE_DB, 'products');
+   
+  
+       let q = query(productRef);
+
+       q = query(q, where('check_in', '>=', currentWeekMonday));
+       q = query(q, where('check_in', '<=', currentWeekSunday));
+       q = query(q, orderBy('check_in'));
+    
+      const subscriber=onSnapshot(q,{
+          next:(snapshot)=>{
+            const products:any=[];
+            snapshot.docs.forEach((doc)=>{
+              const check_in=doc.data().check_in?.toDate()
+              const check_out=doc.data().check_out?.toDate()
+              const createdAt=doc.data().createdAt?.toDate()
+              products.push({
+                id:doc.id,
+                ...doc.data(),
+                check_in,
+                check_out,
+                createdAt,
+              })
+              
+            })
+            
+            setIsLoadingWeekly(false)
+              setProductsWeekly(products)
+          }
+        })
+
+        return subscriber
+  }
+
+  return [
+          isLoadingWeekly,
+          setIsLoadingWeekly,
+          productsWeekly,
+          setProductsWeekly,
+          loadProductsWeekly
+        ]
 }
 
 export const  useClientRooms=()=>{

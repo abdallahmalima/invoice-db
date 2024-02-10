@@ -46,10 +46,8 @@ export function getTotalTodayPayments(products) {
       const lastWeekSundayDay = currentWeekSunday.getDate();
      
       return (
-         (paymentYear === lastWeekMondayYear && paymentMonth === lastWeekMondayMonth) && (paymentDay >= lastWeekMondayDay && paymentDay <= lastWeekSundayDay) 
-       
-       
-       
+         //(paymentYear === lastWeekMondayYear && paymentMonth === lastWeekMondayMonth) && (paymentDay >= lastWeekMondayDay && paymentDay <= lastWeekSundayDay) 
+         true
       );
     }).map(product=>{
         const days=calculateDateDifference(product.check_in,product.check_out);
@@ -60,7 +58,8 @@ export function getTotalTodayPayments(products) {
       })
 
      
-
+      console.log("Weekly:-----------")
+      console.log(filtedProducts)
 const totalSales=filtedProducts.reduce((total, payment) => total + payment.payment, 0);
 
 return totalSales
@@ -238,7 +237,7 @@ return totalSales
   return dailyTotals;
   }
 
-  function getCurrentWeekMondayAndSunday() {
+  export default function getCurrentWeekMondayAndSunday() {
     const today = new Date();
     if(isProduction()|| isDevelopment()){
       today.setHours(today.getHours() + 3);
@@ -258,6 +257,27 @@ return totalSales
   
     return { currentWeekMonday, currentWeekSunday };
   }
+
+  export  function getCurrentWeekMondayAndSundayClient() {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const dayOfWeek = today.getDay(); // 0 is Sunday, 1 is Monday, etc.
+  
+    // Calculate the difference between the current day and Monday
+    const daysUntilMonday = dayOfWeek === 0 ? 1 - 7 : 1 - dayOfWeek;
+  
+    // Calculate this week's Monday by adding the difference from the current date
+    const currentWeekMonday = new Date(today);
+    currentWeekMonday.setDate(today.getDate() + daysUntilMonday);
+  
+    // Calculate this week's Sunday by adding six days to this week's Monday
+    const currentWeekSunday = new Date(currentWeekMonday);
+    currentWeekSunday.setDate(currentWeekMonday.getDate() + 6);
+    currentWeekSunday.setHours(23,59,59,999);
+  
+    return { currentWeekMonday, currentWeekSunday };
+  }
+  
 
   export function getTotalSalesThisWeekDataset(products) {
     const {  currentWeekMonday, currentWeekSunday } = getCurrentWeekMondayAndSunday();

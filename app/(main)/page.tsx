@@ -11,7 +11,7 @@ import { LayoutContext } from '../../layout/context/layoutcontext';
 import Link from 'next/link';
 import { Demo } from '../../types/types';
 import { ChartData, ChartOptions } from 'chart.js';
-import { useClients } from '../../demo/hook/DataFetcher';
+import { useClients, useClientsWeekly } from '../../demo/hook/DataFetcher';
 import { calculateSalesDifference, calculateSalesDifferenceMonth, getTotalSalesCurrentMonthDataset, getTotalSalesLastMonthDataset, getTotalSalesLastWeekDataset, getTotalSalesThisWeekDataset, getTotalThisMonthPayments, getTotalThisWeekPayments, getTotalThisYearPayments, getTotalTodayPayments } from '../../demo/lib/calc';
 import { formatNumberWithCommas } from '../../demo/lib/currency';
 
@@ -79,9 +79,10 @@ const Dashboard = () => {
 
   
    const [isLoading, setIsLoading, products, setProducts, loadProducts] = useClients()
+   const [isLoadingWeekly, setIsLoadingWeekly, productsWeekly, setProductsWeekly, loadProductsWeeklyWeekly] = useClientsWeekly()
 
 const dailyPayments= getTotalTodayPayments(products)
-const weeklyPayments= getTotalThisWeekPayments(products)
+const weeklyPayments= getTotalThisWeekPayments(productsWeekly)
 const monthlyPayments= getTotalThisMonthPayments(products)
 const yearlyPayments= getTotalThisYearPayments(products)
 const weeklyPaymentsDataset= getTotalSalesLastWeekDataset(products)
