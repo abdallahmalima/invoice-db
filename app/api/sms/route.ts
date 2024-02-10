@@ -6,15 +6,15 @@ export const dynamic = 'force-dynamic';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function POST(request: Request) {
-  const {phone,email} = await request.json();
+export async function GET(request: Request) {
+  //const {phone,email} = await request.json();
     // smsService.js
     
 
     const api_key = process.env.NEXT_SMS_API_KEY;
     const secret_key = process.env.NEXT_SMS_API_SECRET;
     const content_type = "application/json";
-    const source_addr = "INFO";
+    const source_addr = "JASMAI";
     
     // Function to encode credentials using Buffer in Node.js
     const encodeCredentials = () => {
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
             recipients: [
               {
                 recipient_id: 1,
-                dest_addr: phone,
+                dest_addr: "255758453701",
               },
             //   {
             //     recipient_id: 2,
@@ -57,18 +57,18 @@ export async function POST(request: Request) {
        
       }
 
-      try {
-        const data = await resend.emails.send({
-          from: 'Joshmal Hotels <promo@jasmai.design>',
-          to: [email],
-          subject: 'Ahsante Mteja!',
-          react: EmailTemplate({ firstName: "Malima" }),
-        });
+      // try {
+      //   const data = await resend.emails.send({
+      //     from: 'Joshmal Hotels <promo@jasmai.design>',
+      //     to: [email],
+      //     subject: 'Ahsante Mteja!',
+      //     react: EmailTemplate({ firstName: "Malima" }),
+      //   });
     
-        console.log("yesss")
-      } catch (error) {
-        console.log(error)
-      }
+      //   console.log("yesss")
+      // } catch (error) {
+      //   console.log(error)
+      // }
   
 
     return new Response('Hello, Next.js!')

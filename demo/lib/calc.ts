@@ -46,8 +46,9 @@ export function getTotalTodayPayments(products) {
       const lastWeekSundayDay = currentWeekSunday.getDate();
      
       return (
-        (paymentYear === lastWeekMondayYear && paymentMonth === lastWeekMondayMonth) && (paymentDay >= lastWeekMondayDay && paymentDay <= lastWeekSundayDay) ||
-        (paymentYear === lastWeekMondayYear && paymentMonth < lastWeekSundayMonth) && (paymentDay >= lastWeekMondayDay && paymentDay >= lastWeekSundayDay)
+         (paymentYear === lastWeekMondayYear && paymentMonth === lastWeekMondayMonth) && (paymentDay >= lastWeekMondayDay && paymentDay <= lastWeekSundayDay) 
+       
+       
        
       );
     }).map(product=>{
