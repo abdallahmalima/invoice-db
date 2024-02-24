@@ -117,12 +117,12 @@ console.log("this weeeeeeeeeeeeeeek",totalThisWeekSales)
 
   const comparisonStatement = (
     <p>
-      You Have <span className={status === 'Rise' ? 'text-green-500' : 'text-red-500'}>{status}</span> of <span className="text-green-500 font-medium">{positivePercentageChange}%</span> which is <span className="text-green-500 font-medium">{formatNumberWithCommas(Math.abs(salesDifference))}{"/="}</span> This Week.
+      You Have <span className={status === 'Rise' ? 'text-green-500' : 'text-red-500'}>{status}</span> of <span className="text-green-500 font-medium">{positivePercentageChange}%</span> which is <span className="text-green-500 font-medium">{formatNumberWithCommas(Math.abs(salesDifference).toFixed(2))}{"/="}</span> This Week.
     </p>
   );
   const comparisonStatementMonth = (
     <p>
-      You Have <span className={statusMonth === 'Rise' ? 'text-green-500' : 'text-red-500'}>{statusMonth}</span> of <span className="text-green-500 font-medium">{positivePercentageChangeMonth}%</span> which is <span className="text-green-500 font-medium">{formatNumberWithCommas(Math.abs(salesDifferenceMonth))}{"/="}</span> This Month.
+      You Have <span className={statusMonth === 'Rise' ? 'text-green-500' : 'text-red-500'}>{statusMonth}</span> of <span className="text-green-500 font-medium">{positivePercentageChangeMonth}%</span> which is <span className="text-green-500 font-medium">{formatNumberWithCommas(Math.abs(salesDifferenceMonth).toFixed(2))}{"/="}</span> This Month.
     </p>
   );
   console.log(comparisonStatement);
