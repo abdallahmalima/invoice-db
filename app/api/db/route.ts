@@ -1,3 +1,4 @@
+import { deleteProducts, fetchProducts,insertProducts } from "../../../data";
 import { EmailTemplate } from "../../../demo/components/emails/email-template";
 import { Resend } from 'resend';
 
@@ -79,23 +80,12 @@ const resend = new Resend(process.env.RESEND_API_KEY);
  
  
 export async function GET(request: Request) {
+      const dataaa = await deleteProducts(["mimi"]);
+      const dataa = await insertProducts(["mimi","wewe"]);
+      const data = await fetchProducts();
+      console.log(data)
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require('twilio')(accountSid, authToken);
-
-const sms1="Hi Selena Hotels,\n\nYour balance for invoice no. 234 is 2,500,000 TZS. The invoice due date will be May 31, 2024.\n\nThank you for your loyalty.\n(Tribute Tanzania Ltd)"
-const sms2="Hi Selena Hotels,\n\nThis is a reminder to settle the outstanding balance for invoice no. 234, which amounts to 2,500,000 TZS. The invoice is overdue, with a due date of May 31, 2024.\n\nThank you for your loyalty.(Tribute Tanzania Ltd)"
-
-client.messages
-      .create({
-         from: 'whatsapp:+14155238886',
-         body: sms1,
-         to: 'whatsapp:+255676393918'
-       })
-      .then(message => console.log(message.sid));
-
-      return new Response('Hello, Next.js!'+accountSid+" : "+authToken)
+      return new Response(data);
 }
  
 export async function DELETE(request: Request) {}
