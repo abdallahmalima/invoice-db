@@ -80,12 +80,13 @@ const resend = new Resend(process.env.RESEND_API_KEY);
  
  
 export async function GET(request: Request) {
-      const dataaa = await deleteProducts(["mimi"]);
-      const dataa = await insertProducts(["mimi","wewe"]);
-      const data = await fetchProducts();
-      console.log(data)
+      // const dataaa = await deleteProducts(["mimi"]);
+      // const dataa = await insertProducts(["mimi","wewe"]);
+      // const data = await fetchProducts();
+      // console.log(data)
 
-      return new Response(data);
+      //return new Response(data);
+      return new Response("Yesssss");
 }
  
 export async function DELETE(request: Request) {}
